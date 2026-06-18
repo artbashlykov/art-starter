@@ -1,0 +1,39 @@
+/**
+ * Orange 404 template theme.
+ *
+ * @package Art_Starter
+ */
+
+.art-starter-not-found--orange .art-starter-not-found-shell,
+.art-starter-not-found-shell.art-starter-not-found--orange {
+	background: linear-gradient(180deg, #f3ebe3 0%, #f9f3ee 36%, #f9f3ee 100%);
+}
+
+.art-starter-not-found--orange .art-starter-not-found-code {
+	color: #b85c38;
+}
+
+.art-starter-not-found--orange .art-starter-not-found-title {
+	color: #2d1e17;
+}
+
+.art-starter-not-found--orange .art-starter-not-found-button--primary {
+	background: #b85c38;
+	box-shadow: 0 8px 20px rgba(184, 92, 56, 0.24);
+}
+
+.art-starter-not-found--orange .art-starter-not-found-button--secondary {
+	color: #b85c38;
+	border-color: #b85c38;
+	background: #ffffff;
+}
+
+.art-starter-not-found--orange .art-starter-not-found-button--secondary .art-starter-not-found-button__icon-svg,
+.art-starter-not-found--orange .art-starter-not-found-button--secondary .art-starter-not-found-button__icon-svg svg {
+	color: #b85c38;
+}
+
+.art-starter-not-found-preview__frame.art-starter-not-found-preview__frame--orange {
+	background: linear-gradient(180deg, #f3ebe3 0%, #f9f3ee 36%, #f9f3ee 100%);
+	border-color: #d9c4b8;
+}

@@ -1,0 +1,164 @@
+/**
+ * Pink homepage template theme.
+ *
+ * @package Art_Starter
+ */
+
+.art-starter-homepage--pink .art-starter-homepage-shell,
+.art-starter-homepage-shell.art-starter-homepage--pink {
+	position: relative;
+	overflow: hidden;
+	background: linear-gradient(180deg, #fff0f3 0%, #fff5f6 42%, #fff5f6 100%);
+}
+
+.art-starter-homepage--pink .art-starter-homepage-shell::before,
+.art-starter-homepage--pink .art-starter-homepage-shell::after,
+.art-starter-homepage-shell.art-starter-homepage--pink::before,
+.art-starter-homepage-shell.art-starter-homepage--pink::after {
+	content: "";
+	position: absolute;
+	border-radius: 50%;
+	pointer-events: none;
+}
+
+.art-starter-homepage--pink .art-starter-homepage-shell::before,
+.art-starter-homepage-shell.art-starter-homepage--pink::before {
+	top: 24px;
+	left: -40px;
+	width: 160px;
+	height: 160px;
+	background: radial-gradient(circle, rgba(244, 194, 204, 0.45) 0%, rgba(244, 194, 204, 0) 72%);
+}
+
+.art-starter-homepage--pink .art-starter-homepage-shell::after,
+.art-starter-homepage-shell.art-starter-homepage--pink::after {
+	right: -28px;
+	bottom: 88px;
+	width: 190px;
+	height: 190px;
+	background: radial-gradient(circle, rgba(230, 122, 148, 0.18) 0%, rgba(230, 122, 148, 0) 74%);
+}
+
+.art-starter-homepage--pink .art-starter-homepage-card {
+	position: relative;
+	z-index: 1;
+	background: transparent;
+	border: none;
+	box-shadow: none;
+}
+
+.art-starter-homepage--pink .art-starter-homepage-avatar {
+	background: #fff5f8;
+	border-color: #f4c2cc;
+	box-shadow: 0 0 0 4px #ffffff, 0 0 0 6px rgba(244, 194, 204, 0.55);
+}
+
+.art-starter-homepage--pink .art-starter-homepage-avatar__placeholder {
+	color: #e67a94;
+}
+
+.art-starter-homepage--pink .art-starter-homepage-name {
+	color: #331a1e;
+}
+
+.art-starter-homepage--pink .art-starter-homepage-roles {
+	color: #7a6a6a;
+}
+
+.art-starter-homepage--pink .art-starter-homepage-bio {
+	color: #7a6a6a;
+}
+
+.art-starter-homepage--pink .art-starter-homepage-cta {
+	background: #e67a94;
+	box-shadow: 0 0 0 1px #d96a86, 0 8px 20px rgba(230, 122, 148, 0.28);
+}
+
+.art-starter-homepage--pink .art-starter-homepage-cta:hover,
+.art-starter-homepage--pink .art-starter-homepage-cta:focus,
+.art-starter-homepage--pink .art-starter-homepage-cta:active,
+.art-starter-homepage--pink .art-starter-homepage-cta:visited {
+	color: #ffffff;
+}
+
+.art-starter-homepage--pink .art-starter-homepage-cta__icon,
+.art-starter-homepage--pink .art-starter-homepage-cta__icon-svg,
+.art-starter-homepage--pink .art-starter-homepage-cta__icon-svg svg {
+	color: #ffffff;
+}
+
+.art-starter-homepage--pink .art-starter-homepage-link {
+	border-color: #f9e3ea;
+	background: #ffffff;
+	box-shadow: 0 2px 10px rgba(51, 26, 30, 0.05);
+}
+
+.art-starter-homepage--pink .art-starter-homepage-link__icon {
+	background: #fff5f8;
+	color: #e67a94;
+}
+
+.art-starter-homepage--pink .art-starter-homepage-link__icon-svg,
+.art-starter-homepage--pink .art-starter-homepage-link__icon-svg svg {
+	color: #e67a94;
+}
+
+.art-starter-homepage--pink .art-starter-homepage-link__text {
+	color: #331a1e;
+}
+
+.art-starter-homepage--pink .art-starter-homepage-link__arrow {
+	color: #b89aa3;
+}
+
+.art-starter-homepage--pink .art-starter-homepage-recommend {
+	border-color: #f4c2cc;
+	background: #fff0f3;
+	box-shadow: none;
+}
+
+.art-starter-homepage--pink .art-starter-homepage-recommend__badge {
+	color: #e67a94;
+	background: #fff0f3;
+	border-color: #f4c2cc;
+}
+
+.art-starter-homepage--pink .art-starter-homepage-recommend__title {
+	color: #331a1e;
+}
+
+.art-starter-homepage--pink .art-starter-homepage-recommend__desc {
+	color: #7a6a6a;
+}
+
+.art-starter-homepage--pink .art-starter-homepage-recommend__button {
+	color: #e67a94;
+	border-color: #e67a94;
+	background: #ffffff;
+}
+
+.art-starter-homepage--pink .art-starter-homepage-social__item {
+	border-color: #f4c2cc;
+	background: #ffffff;
+	color: #e67a94;
+	box-shadow: 0 2px 10px rgba(51, 26, 30, 0.05);
+}
+
+.art-starter-homepage--pink .art-starter-homepage-social__icon-svg,
+.art-starter-homepage--pink .art-starter-homepage-social__icon-svg svg {
+	color: #e67a94;
+}
+
+.art-starter-homepage--pink .art-starter-homepage-link__icon .art-starter-icon--letter,
+.art-starter-homepage--pink .art-starter-homepage-cta__icon .art-starter-icon--letter {
+	color: inherit;
+}
+
+.art-starter-homepage--pink .art-starter-homepage-social__item .art-starter-icon--letter {
+	color: #e67a94;
+}
+
+.art-starter-homepage-preview__frame.art-starter-homepage-preview__frame--pink {
+	background: linear-gradient(180deg, #fff0f3 0%, #fff5f6 42%, #fff5f6 100%);
+	border-color: #f4c2cc;
+}

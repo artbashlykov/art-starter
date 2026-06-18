@@ -1,0 +1,174 @@
+/**
+ * Green homepage template theme.
+ *
+ * @package Art_Starter
+ */
+
+.art-starter-homepage--green .art-starter-homepage-shell,
+.art-starter-homepage-shell.art-starter-homepage--green {
+	position: relative;
+	overflow: hidden;
+	background-color: #f9fbf9;
+	background-image:
+		radial-gradient(circle at 92% 6%, rgba(93, 138, 88, 0.14) 0 1px, transparent 1px 100%),
+		radial-gradient(circle at 94% 10%, rgba(93, 138, 88, 0.12) 0 1px, transparent 1px 100%),
+		radial-gradient(circle at 88% 14%, rgba(93, 138, 88, 0.1) 0 1px, transparent 1px 100%),
+		linear-gradient(180deg, #f4f8f4 0%, #f9fbf9 38%, #f9fbf9 100%);
+	background-size: 18px 18px, 18px 18px, 18px 18px, auto;
+}
+
+.art-starter-homepage--green .art-starter-homepage-shell::before,
+.art-starter-homepage--green .art-starter-homepage-shell::after,
+.art-starter-homepage-shell.art-starter-homepage--green::before,
+.art-starter-homepage-shell.art-starter-homepage--green::after {
+	content: "";
+	position: absolute;
+	pointer-events: none;
+}
+
+.art-starter-homepage--green .art-starter-homepage-shell::before,
+.art-starter-homepage-shell.art-starter-homepage--green::before {
+	top: 36px;
+	left: -52px;
+	width: 190px;
+	height: 150px;
+	border-radius: 62% 38% 48% 52% / 42% 58% 42% 58%;
+	background: radial-gradient(circle at 40% 40%, rgba(132, 176, 126, 0.42) 0%, rgba(132, 176, 126, 0) 72%);
+	transform: rotate(-18deg);
+}
+
+.art-starter-homepage--green .art-starter-homepage-shell::after,
+.art-starter-homepage-shell.art-starter-homepage--green::after {
+	top: 120px;
+	right: -44px;
+	width: 170px;
+	height: 140px;
+	border-radius: 48% 52% 58% 42% / 52% 48% 42% 58%;
+	background: radial-gradient(circle at 55% 45%, rgba(93, 138, 88, 0.3) 0%, rgba(93, 138, 88, 0) 74%);
+	transform: rotate(14deg);
+}
+
+.art-starter-homepage--green .art-starter-homepage-card {
+	position: relative;
+	z-index: 1;
+	background: transparent;
+	border: none;
+	box-shadow: none;
+}
+
+.art-starter-homepage--green .art-starter-homepage-avatar {
+	background: #f0f7ef;
+	border-color: #d4e6d2;
+	box-shadow: 0 0 0 4px #ffffff, 0 0 0 6px rgba(212, 230, 210, 0.85);
+}
+
+.art-starter-homepage--green .art-starter-homepage-avatar__placeholder {
+	color: #4a7c44;
+}
+
+.art-starter-homepage--green .art-starter-homepage-name {
+	color: #002b11;
+}
+
+.art-starter-homepage--green .art-starter-homepage-roles {
+	color: #5d8a58;
+}
+
+.art-starter-homepage--green .art-starter-homepage-bio {
+	color: #3d4a3a;
+}
+
+.art-starter-homepage--green .art-starter-homepage-cta {
+	background: #4a7c44;
+	box-shadow: 0 8px 20px rgba(74, 124, 68, 0.24);
+}
+
+.art-starter-homepage--green .art-starter-homepage-cta:hover,
+.art-starter-homepage--green .art-starter-homepage-cta:focus,
+.art-starter-homepage--green .art-starter-homepage-cta:active,
+.art-starter-homepage--green .art-starter-homepage-cta:visited {
+	color: #ffffff;
+}
+
+.art-starter-homepage--green .art-starter-homepage-cta__icon,
+.art-starter-homepage--green .art-starter-homepage-cta__icon-svg,
+.art-starter-homepage--green .art-starter-homepage-cta__icon-svg svg {
+	color: #ffffff;
+}
+
+.art-starter-homepage--green .art-starter-homepage-link {
+	border-color: #e8f0e7;
+	background: #ffffff;
+	box-shadow: 0 4px 16px rgba(74, 124, 68, 0.1);
+}
+
+.art-starter-homepage--green .art-starter-homepage-link__icon {
+	background: #eef6ed;
+	color: #5d8a58;
+}
+
+.art-starter-homepage--green .art-starter-homepage-link__icon-svg,
+.art-starter-homepage--green .art-starter-homepage-link__icon-svg svg {
+	color: #5d8a58;
+}
+
+.art-starter-homepage--green .art-starter-homepage-link__text {
+	color: #1d261b;
+}
+
+.art-starter-homepage--green .art-starter-homepage-link__arrow {
+	color: #4a7c44;
+}
+
+.art-starter-homepage--green .art-starter-homepage-recommend {
+	border-color: #e8f0e7;
+	background: #ffffff;
+	box-shadow: 0 8px 24px rgba(74, 124, 68, 0.1);
+}
+
+.art-starter-homepage--green .art-starter-homepage-recommend__badge {
+	color: #4a7c44;
+	background: #d4e6d2;
+	border-color: #c5dcc2;
+}
+
+.art-starter-homepage--green .art-starter-homepage-recommend__title {
+	color: #002b11;
+}
+
+.art-starter-homepage--green .art-starter-homepage-recommend__desc {
+	color: #3d4a3a;
+}
+
+.art-starter-homepage--green .art-starter-homepage-recommend__button {
+	color: #4a7c44;
+	border-color: #d4e6d2;
+	background: #ffffff;
+}
+
+.art-starter-homepage--green .art-starter-homepage-social__item {
+	border-color: #d4e6d2;
+	background: #ffffff;
+	color: #5d8a58;
+	box-shadow: 0 4px 14px rgba(74, 124, 68, 0.08);
+}
+
+.art-starter-homepage--green .art-starter-homepage-social__icon-svg,
+.art-starter-homepage--green .art-starter-homepage-social__icon-svg svg {
+	color: #5d8a58;
+}
+
+.art-starter-homepage--green .art-starter-homepage-link__icon .art-starter-icon--letter,
+.art-starter-homepage--green .art-starter-homepage-cta__icon .art-starter-icon--letter {
+	color: inherit;
+}
+
+.art-starter-homepage--green .art-starter-homepage-social__item .art-starter-icon--letter {
+	color: #5d8a58;
+}
+
+.art-starter-homepage-preview__frame.art-starter-homepage-preview__frame--green {
+	background-color: #f9fbf9;
+	background-image: linear-gradient(180deg, #f4f8f4 0%, #f9fbf9 38%, #f9fbf9 100%);
+	border-color: #d4e6d2;
+}

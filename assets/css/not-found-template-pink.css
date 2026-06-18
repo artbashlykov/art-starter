@@ -1,0 +1,38 @@
+/**
+ * Pink 404 template theme.
+ *
+ * @package Art_Starter
+ */
+
+.art-starter-not-found--pink .art-starter-not-found-shell,
+.art-starter-not-found-shell.art-starter-not-found--pink {
+	background: linear-gradient(180deg, #fff0f3 0%, #fff5f6 42%, #fff5f6 100%);
+}
+
+.art-starter-not-found--pink .art-starter-not-found-code {
+	color: #e67a94;
+}
+
+.art-starter-not-found--pink .art-starter-not-found-title {
+	color: #331a1e;
+}
+
+.art-starter-not-found--pink .art-starter-not-found-button--primary {
+	background: #e67a94;
+	box-shadow: 0 0 0 1px #d96a86, 0 8px 20px rgba(230, 122, 148, 0.28);
+}
+
+.art-starter-not-found--pink .art-starter-not-found-button--secondary {
+	color: #e67a94;
+	border-color: #e67a94;
+}
+
+.art-starter-not-found--pink .art-starter-not-found-button--secondary .art-starter-not-found-button__icon-svg,
+.art-starter-not-found--pink .art-starter-not-found-button--secondary .art-starter-not-found-button__icon-svg svg {
+	color: #e67a94;
+}
+
+.art-starter-not-found-preview__frame.art-starter-not-found-preview__frame--pink {
+	background: linear-gradient(180deg, #fff0f3 0%, #fff5f6 42%, #fff5f6 100%);
+	border-color: #f4c2cc;
+}

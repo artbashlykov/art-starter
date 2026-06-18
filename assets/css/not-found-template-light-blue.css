@@ -1,0 +1,38 @@
+/**
+ * Light blue 404 template theme.
+ *
+ * @package Art_Starter
+ */
+
+.art-starter-not-found--light-blue .art-starter-not-found-shell,
+.art-starter-not-found-shell.art-starter-not-found--light-blue {
+	background: linear-gradient(180deg, #f0f9ff 0%, #f8fbff 52%, #ffffff 100%);
+}
+
+.art-starter-not-found--light-blue .art-starter-not-found-code {
+	color: #3b82f6;
+}
+
+.art-starter-not-found--light-blue .art-starter-not-found-title {
+	color: #0f172a;
+}
+
+.art-starter-not-found--light-blue .art-starter-not-found-button--primary {
+	background: linear-gradient(90deg, #60a5fa 0%, #3b82f6 52%, #2563eb 100%);
+	box-shadow: 0 10px 24px rgba(37, 99, 235, 0.28);
+}
+
+.art-starter-not-found--light-blue .art-starter-not-found-button--secondary {
+	color: #3b82f6;
+	border-color: rgba(59, 130, 246, 0.42);
+}
+
+.art-starter-not-found--light-blue .art-starter-not-found-button--secondary .art-starter-not-found-button__icon-svg,
+.art-starter-not-found--light-blue .art-starter-not-found-button--secondary .art-starter-not-found-button__icon-svg svg {
+	color: #3b82f6;
+}
+
+.art-starter-not-found-preview__frame.art-starter-not-found-preview__frame--light-blue {
+	background: linear-gradient(180deg, #f0f9ff 0%, #f8fbff 52%, #ffffff 100%);
+	border-color: #bfdbfe;
+}

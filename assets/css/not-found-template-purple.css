@@ -1,0 +1,38 @@
+/**
+ * Purple 404 template theme.
+ *
+ * @package Art_Starter
+ */
+
+.art-starter-not-found--purple .art-starter-not-found-shell,
+.art-starter-not-found-shell.art-starter-not-found--purple {
+	background: linear-gradient(180deg, #e9d8fd 0%, #f3ebff 20%, #f9f7ff 48%, #f9f7ff 100%);
+}
+
+.art-starter-not-found--purple .art-starter-not-found-code {
+	color: #7c3aed;
+}
+
+.art-starter-not-found--purple .art-starter-not-found-title {
+	color: #2d1654;
+}
+
+.art-starter-not-found--purple .art-starter-not-found-button--primary {
+	background: linear-gradient(180deg, #7c3aed 0%, #5b21b6 100%);
+	box-shadow: 0 10px 24px rgba(91, 33, 182, 0.28);
+}
+
+.art-starter-not-found--purple .art-starter-not-found-button--secondary {
+	color: #4a2c82;
+	border-color: #8a4fb1;
+}
+
+.art-starter-not-found--purple .art-starter-not-found-button--secondary .art-starter-not-found-button__icon-svg,
+.art-starter-not-found--purple .art-starter-not-found-button--secondary .art-starter-not-found-button__icon-svg svg {
+	color: #4a2c82;
+}
+
+.art-starter-not-found-preview__frame.art-starter-not-found-preview__frame--purple {
+	background: linear-gradient(180deg, #e9d8fd 0%, #f3ebff 20%, #f9f7ff 48%, #f9f7ff 100%);
+	border-color: #d8b4fe;
+}

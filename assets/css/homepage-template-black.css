@@ -1,0 +1,167 @@
+/**
+ * Black homepage template theme.
+ *
+ * @package Art_Starter
+ */
+
+.art-starter-homepage--black .art-starter-homepage-shell,
+.art-starter-homepage-shell.art-starter-homepage--black {
+	position: relative;
+	overflow: hidden;
+	background-color: #000000;
+	background-image: radial-gradient(ellipse 90% 52% at 50% 0%, rgba(0, 122, 255, 0.24) 0%, rgba(138, 43, 226, 0.14) 42%, transparent 74%);
+}
+
+.art-starter-homepage--black .art-starter-homepage-shell::before,
+.art-starter-homepage--black .art-starter-homepage-shell::after,
+.art-starter-homepage-shell.art-starter-homepage--black::before,
+.art-starter-homepage-shell.art-starter-homepage--black::after {
+	content: "";
+	position: absolute;
+	border-radius: 50%;
+	pointer-events: none;
+}
+
+.art-starter-homepage--black .art-starter-homepage-shell::before,
+.art-starter-homepage-shell.art-starter-homepage--black::before {
+	top: 48px;
+	left: 50%;
+	width: 280px;
+	height: 280px;
+	transform: translateX(-50%);
+	background: radial-gradient(circle, rgba(0, 122, 255, 0.2) 0%, rgba(138, 43, 226, 0.1) 42%, transparent 72%);
+}
+
+.art-starter-homepage--black .art-starter-homepage-card {
+	position: relative;
+	z-index: 1;
+	background: transparent;
+	border: none;
+	box-shadow: none;
+}
+
+.art-starter-homepage--black .art-starter-homepage-avatar {
+	background: #05080d;
+	border: 2px solid transparent;
+	background-image: linear-gradient(#05080d, #05080d), linear-gradient(135deg, #8a2be2 0%, #007aff 100%);
+	background-origin: border-box;
+	background-clip: padding-box, border-box;
+	box-shadow: 0 0 22px rgba(0, 122, 255, 0.38), 0 0 30px rgba(138, 43, 226, 0.28);
+}
+
+.art-starter-homepage--black .art-starter-homepage-avatar__placeholder {
+	color: #5b8cff;
+}
+
+.art-starter-homepage--black .art-starter-homepage-name {
+	color: #ffffff;
+}
+
+.art-starter-homepage--black .art-starter-homepage-roles {
+	color: #a0a0a0;
+}
+
+.art-starter-homepage--black .art-starter-homepage-bio {
+	color: rgba(255, 255, 255, 0.88);
+}
+
+.art-starter-homepage--black .art-starter-homepage-cta {
+	background: #007aff;
+	box-shadow: 0 0 18px rgba(0, 122, 255, 0.55), 0 8px 24px rgba(0, 122, 255, 0.32);
+}
+
+.art-starter-homepage--black .art-starter-homepage-cta:hover,
+.art-starter-homepage--black .art-starter-homepage-cta:focus,
+.art-starter-homepage--black .art-starter-homepage-cta:active,
+.art-starter-homepage--black .art-starter-homepage-cta:visited {
+	color: #ffffff;
+}
+
+.art-starter-homepage--black .art-starter-homepage-cta__icon,
+.art-starter-homepage--black .art-starter-homepage-cta__icon-svg,
+.art-starter-homepage--black .art-starter-homepage-cta__icon-svg svg {
+	color: #ffffff;
+}
+
+.art-starter-homepage--black .art-starter-homepage-link {
+	border-color: rgba(0, 122, 255, 0.28);
+	background: rgba(8, 12, 20, 0.88);
+	box-shadow: none;
+}
+
+.art-starter-homepage--black .art-starter-homepage-link__icon {
+	background: transparent;
+	color: #1e90ff;
+}
+
+.art-starter-homepage--black .art-starter-homepage-link__icon-svg,
+.art-starter-homepage--black .art-starter-homepage-link__icon-svg svg {
+	color: #1e90ff;
+}
+
+.art-starter-homepage--black .art-starter-homepage-link__text {
+	color: #ffffff;
+}
+
+.art-starter-homepage--black .art-starter-homepage-link__arrow {
+	color: #5b8cff;
+}
+
+.art-starter-homepage--black .art-starter-homepage-recommend {
+	border-color: rgba(138, 43, 226, 0.42);
+	background: rgba(8, 12, 20, 0.92);
+	box-shadow: 0 0 20px rgba(138, 43, 226, 0.18);
+}
+
+.art-starter-homepage--black .art-starter-homepage-recommend__badge {
+	color: #c4b5fd;
+	background: rgba(138, 43, 226, 0.22);
+	border-color: rgba(138, 43, 226, 0.38);
+}
+
+.art-starter-homepage--black .art-starter-homepage-recommend__title {
+	color: #ffffff;
+}
+
+.art-starter-homepage--black .art-starter-homepage-recommend__desc {
+	color: #a0a0a0;
+}
+
+.art-starter-homepage--black .art-starter-homepage-recommend__button {
+	color: #ffffff;
+	border-color: rgba(138, 43, 226, 0.55);
+	background: rgba(5, 8, 13, 0.9);
+	box-shadow: 0 0 12px rgba(138, 43, 226, 0.16);
+}
+
+.art-starter-homepage--black .art-starter-homepage-social__item {
+	border: 1px solid rgba(0, 122, 255, 0.34);
+	background: #0a0f16;
+	color: #ffffff;
+	box-shadow: 0 0 14px rgba(0, 122, 255, 0.22), 0 0 10px rgba(138, 43, 226, 0.14);
+}
+
+.art-starter-homepage--black .art-starter-homepage-social__icon-svg,
+.art-starter-homepage--black .art-starter-homepage-social__icon-svg svg {
+	color: #ffffff;
+}
+
+.art-starter-homepage--black .art-starter-homepage-link__icon .art-starter-icon--letter,
+.art-starter-homepage--black .art-starter-homepage-cta__icon .art-starter-icon--letter {
+	color: inherit;
+}
+
+.art-starter-homepage--black .art-starter-homepage-social__item .art-starter-icon--letter {
+	color: #ffffff;
+}
+
+body.art-starter-homepage--black {
+	color: #ffffff;
+	background: #000000;
+}
+
+.art-starter-homepage-preview__frame.art-starter-homepage-preview__frame--black {
+	background-color: #000000;
+	background-image: radial-gradient(ellipse 90% 52% at 50% 0%, rgba(0, 122, 255, 0.24) 0%, rgba(138, 43, 226, 0.14) 42%, transparent 74%);
+	border-color: rgba(0, 122, 255, 0.28);
+}

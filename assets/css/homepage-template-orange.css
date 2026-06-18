@@ -1,0 +1,168 @@
+/**
+ * Orange homepage template theme.
+ *
+ * @package Art_Starter
+ */
+
+.art-starter-homepage--orange .art-starter-homepage-shell,
+.art-starter-homepage-shell.art-starter-homepage--orange {
+	position: relative;
+	overflow: hidden;
+	background: linear-gradient(180deg, #f3ebe3 0%, #f9f3ee 36%, #f9f3ee 100%);
+}
+
+.art-starter-homepage--orange .art-starter-homepage-shell::before,
+.art-starter-homepage--orange .art-starter-homepage-shell::after,
+.art-starter-homepage-shell.art-starter-homepage--orange::before,
+.art-starter-homepage-shell.art-starter-homepage--orange::after {
+	content: "";
+	position: absolute;
+	pointer-events: none;
+}
+
+.art-starter-homepage--orange .art-starter-homepage-shell::before,
+.art-starter-homepage-shell.art-starter-homepage--orange::before {
+	top: -18px;
+	left: -48px;
+	width: 200px;
+	height: 160px;
+	border-radius: 42% 58% 52% 48% / 48% 42% 58% 52%;
+	background: #e8d8cf;
+	opacity: 0.72;
+}
+
+.art-starter-homepage--orange .art-starter-homepage-shell::after,
+.art-starter-homepage-shell.art-starter-homepage--orange::after {
+	top: 8px;
+	right: -36px;
+	width: 170px;
+	height: 130px;
+	border-radius: 58% 42% 48% 52% / 52% 58% 42% 48%;
+	background: #e8d8cf;
+	opacity: 0.55;
+}
+
+.art-starter-homepage--orange .art-starter-homepage-card {
+	position: relative;
+	z-index: 1;
+	background: transparent;
+	border: none;
+	box-shadow: none;
+}
+
+.art-starter-homepage--orange .art-starter-homepage-avatar {
+	background: #fff8f3;
+	border-color: #ffffff;
+	box-shadow: 0 0 0 4px #ffffff, 0 0 0 6px rgba(184, 92, 56, 0.28);
+}
+
+.art-starter-homepage--orange .art-starter-homepage-avatar__placeholder {
+	color: #b85c38;
+}
+
+.art-starter-homepage--orange .art-starter-homepage-name {
+	font-family: Georgia, "Times New Roman", serif;
+	color: #2d1e17;
+}
+
+.art-starter-homepage--orange .art-starter-homepage-roles {
+	color: #b85c38;
+}
+
+.art-starter-homepage--orange .art-starter-homepage-bio {
+	color: #2d1e17;
+}
+
+.art-starter-homepage--orange .art-starter-homepage-cta {
+	background: #b85c38;
+	box-shadow: 0 8px 20px rgba(184, 92, 56, 0.24);
+}
+
+.art-starter-homepage--orange .art-starter-homepage-cta:hover,
+.art-starter-homepage--orange .art-starter-homepage-cta:focus,
+.art-starter-homepage--orange .art-starter-homepage-cta:active,
+.art-starter-homepage--orange .art-starter-homepage-cta:visited {
+	color: #ffffff;
+}
+
+.art-starter-homepage--orange .art-starter-homepage-cta__icon,
+.art-starter-homepage--orange .art-starter-homepage-cta__icon-svg,
+.art-starter-homepage--orange .art-starter-homepage-cta__icon-svg svg {
+	color: #ffffff;
+}
+
+.art-starter-homepage--orange .art-starter-homepage-link {
+	border-color: #b85c38;
+	background: transparent;
+	box-shadow: none;
+}
+
+.art-starter-homepage--orange .art-starter-homepage-link__icon {
+	background: transparent;
+	color: #b85c38;
+}
+
+.art-starter-homepage--orange .art-starter-homepage-link__icon-svg,
+.art-starter-homepage--orange .art-starter-homepage-link__icon-svg svg {
+	color: #b85c38;
+}
+
+.art-starter-homepage--orange .art-starter-homepage-link__text {
+	color: #2d1e17;
+}
+
+.art-starter-homepage--orange .art-starter-homepage-link__arrow {
+	color: #b85c38;
+}
+
+.art-starter-homepage--orange .art-starter-homepage-recommend {
+	border-color: #b85c38;
+	background: #ffffff;
+	box-shadow: none;
+}
+
+.art-starter-homepage--orange .art-starter-homepage-recommend__badge {
+	color: #ffffff;
+	background: #b85c38;
+	border-color: #b85c38;
+}
+
+.art-starter-homepage--orange .art-starter-homepage-recommend__title {
+	color: #2d1e17;
+}
+
+.art-starter-homepage--orange .art-starter-homepage-recommend__desc {
+	color: #2d1e17;
+}
+
+.art-starter-homepage--orange .art-starter-homepage-recommend__button {
+	color: #ffffff;
+	border-color: #b85c38;
+	background: #b85c38;
+}
+
+.art-starter-homepage--orange .art-starter-homepage-social__item {
+	border: 1px solid #b85c38;
+	background: #ffffff;
+	color: #b85c38;
+	box-shadow: none;
+}
+
+.art-starter-homepage--orange .art-starter-homepage-social__icon-svg,
+.art-starter-homepage--orange .art-starter-homepage-social__icon-svg svg {
+	color: #b85c38;
+}
+
+.art-starter-homepage--orange .art-starter-homepage-link__icon .art-starter-icon--letter,
+.art-starter-homepage--orange .art-starter-homepage-cta__icon .art-starter-icon--letter {
+	color: inherit;
+}
+
+.art-starter-homepage--orange .art-starter-homepage-social__item .art-starter-icon--letter {
+	color: #b85c38;
+}
+
+.art-starter-homepage-preview__frame.art-starter-homepage-preview__frame--orange {
+	background: linear-gradient(180deg, #f3ebe3 0%, #f9f3ee 36%, #f9f3ee 100%);
+	border-color: #d9c4b8;
+}
