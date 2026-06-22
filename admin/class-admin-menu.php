@@ -170,6 +170,30 @@ class Art_Starter_Admin_Menu {
 			);
 		}
 
+		if ( false !== strpos( $hook, Art_Starter_Admin_Initial_Setup::PAGE_SLUG ) ) {
+			wp_enqueue_media();
+
+			wp_enqueue_script(
+				'art-starter-admin-initial-setup',
+				ART_STARTER_PLUGIN_URL . 'assets/js/admin-initial-setup.js',
+				array( 'jquery' ),
+				ART_STARTER_VERSION,
+				true
+			);
+
+			wp_localize_script(
+				'art-starter-admin-initial-setup',
+				'artStarterInitialSetupAdmin',
+				array(
+					'strings' => array(
+						'selectFavicon' => __( 'Выбрать фавикон', 'art-starter' ),
+						'changeFavicon' => __( 'Заменить фавикон', 'art-starter' ),
+						'removeFavicon' => __( 'Удалить', 'art-starter' ),
+					),
+				)
+			);
+		}
+
 		if ( false !== strpos( $hook, Art_Starter_Admin_Not_Found::PAGE_SLUG ) ) {
 			Art_Starter_Not_Found::register_template_styles();
 			wp_enqueue_style( 'art-starter-not-found-template' );
@@ -192,6 +216,7 @@ class Art_Starter_Admin_Menu {
 				'art-starter-admin-not-found',
 				'artStarterNotFoundAdmin',
 				array(
+					'optionName'           => Art_Starter_Not_Found::OPTION,
 					'maxExtraButtons'      => Art_Starter_Not_Found::MAX_EXTRA_BUTTONS,
 					'primaryDefaultIcon'   => Art_Starter_Not_Found::DEFAULT_PRIMARY_ICON,
 					'extraDefaultIcon'     => Art_Starter_Not_Found::DEFAULT_EXTRA_ICON,

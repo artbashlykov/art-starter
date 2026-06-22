@@ -61,6 +61,23 @@ $removable = $form_state['removable'];
 						</p>
 					</td>
 				</tr>
+				<tr>
+					<th scope="row">
+						<label for="art-starter-site-icon"><?php esc_html_e( 'Фавикон', 'art-starter' ); ?></label>
+					</th>
+					<td>
+						<?php
+						Art_Starter_Admin_Homepage::render_site_icon_field(
+							'art-starter-site-icon',
+							'site_icon',
+							(int) $form_state['site_icon']
+						);
+						?>
+						<p class="description">
+							<?php esc_html_e( 'Иконка сайта во вкладке браузера. Рекомендуется квадратное изображение не меньше 512×512 px.', 'art-starter' ); ?>
+						</p>
+					</td>
+				</tr>
 			</table>
 		</div>
 

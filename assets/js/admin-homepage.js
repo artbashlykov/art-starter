@@ -931,7 +931,7 @@
 			return;
 		}
 
-		var slug = safeText($(this).data('icon-slug'));
+		var slug = safeText($(this).attr('data-icon-slug'));
 		activeIconField.find('.art-starter-icon-field__input').val(slug);
 		updateIconFieldUI(activeIconField);
 		closeIconPicker();

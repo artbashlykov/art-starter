@@ -4,7 +4,7 @@ Tags: starter, onboarding, landing page, link in bio, 404
 Requires at least: 6.0
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 1.0.0
+Stable tag: 1.0.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -39,6 +39,12 @@ ART Starter is for people who want a minimal, fast launch: a simple homepage wit
 The homepage and custom 404 page use self-contained layouts. When enabled, ART Starter removes active theme styles on those pages so the design stays consistent.
 
 == Changelog ==
+
+= 1.0.1 =
+* Fix 404 extra button icon and URL persistence when adding buttons.
+* Fix admin icon picker selection on homepage and 404 settings.
+* Add site favicon picker to the initial setup wizard.
+* Add PHP release zip build script for GitHub releases.
 
 = 1.0.0 =
 * Initial release: admin dashboard, initial setup wizard, homepage and 404 settings, color templates, and update checker hooks.

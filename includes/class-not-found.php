@@ -337,8 +337,12 @@ class Art_Starter_Not_Found {
 
 		$url = isset( $item['url'] ) ? Art_Starter_Homepage::normalize_external_url( (string) $item['url'] ) : '';
 
-		$icon = isset( $item['icon'] ) ? sanitize_key( (string) $item['icon'] ) : '';
-		if ( ! $icon || ! Art_Starter_Icons::get( $icon ) ) {
+		$icon = Art_Starter_Icons::sanitize_slug(
+			isset( $item['icon'] ) ? (string) $item['icon'] : '',
+			Art_Starter_Icons::get_picker_categories(),
+			true
+		);
+		if ( '' === $icon ) {
 			$icon = $defaults['icon'];
 		}
 

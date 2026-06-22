@@ -152,6 +152,49 @@ class Art_Starter_Admin_Homepage {
 	}
 
 	/**
+	 * Render site favicon field (stores attachment ID for site_icon option).
+	 *
+	 * @param string $input_id        Input element ID.
+	 * @param string $input_name      Input name attribute.
+	 * @param int    $attachment_id   Current site icon attachment ID.
+	 */
+	public static function render_site_icon_field( $input_id, $input_name, $attachment_id = 0 ) {
+		$attachment_id = (int) $attachment_id;
+		$image_url     = $attachment_id > 0 ? wp_get_attachment_image_url( $attachment_id, array( 64, 64 ) ) : '';
+		$has_image     = is_string( $image_url ) && '' !== $image_url;
+
+		?>
+		<div class="art-starter-media-field art-starter-media-field--library-only art-starter-media-field--inline" data-art-starter-site-icon-field>
+			<input
+				type="hidden"
+				class="art-starter-site-icon-field__input"
+				id="<?php echo esc_attr( $input_id ); ?>"
+				name="<?php echo esc_attr( $input_name ); ?>"
+				value="<?php echo esc_attr( (string) $attachment_id ); ?>"
+			>
+			<div class="art-starter-media-field__row">
+				<div class="art-starter-media-field__preview" <?php echo $has_image ? '' : ' hidden'; ?>>
+					<img
+						class="art-starter-media-field__thumb art-starter-media-field__thumb--favicon"
+						src="<?php echo esc_url( $image_url ); ?>"
+						alt=""
+						decoding="async"
+					>
+				</div>
+				<div class="art-starter-media-field__actions">
+					<button type="button" class="button art-starter-site-icon-field__select">
+						<?php echo esc_html( $has_image ? __( 'Заменить фавикон', 'art-starter' ) : __( 'Выбрать фавикон', 'art-starter' ) ); ?>
+					</button>
+					<button type="button" class="button-link-delete art-starter-site-icon-field__remove" <?php disabled( ! $has_image ); ?>>
+						<?php esc_html_e( 'Удалить', 'art-starter' ); ?>
+					</button>
+				</div>
+			</div>
+		</div>
+		<?php
+	}
+
+	/**
 	 * Render icon picker field.
 	 *
 	 * @param string               $input_name   Input name attribute.

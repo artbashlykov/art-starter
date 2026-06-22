@@ -139,6 +139,7 @@ class Art_Starter_Admin_Not_Found {
 					$name_prefix . '[icon]',
 					$icon,
 					array(
+						'input_id'     => 'art-starter-not-found-extra-icon-' . $index,
 						'categories'   => Art_Starter_Icons::get_picker_categories(),
 						'default_slug' => Art_Starter_Not_Found::DEFAULT_EXTRA_ICON,
 					)
@@ -153,6 +154,8 @@ class Art_Starter_Admin_Not_Found {
 					name="<?php echo esc_attr( $name_prefix . '[label]' ); ?>"
 					value="<?php echo esc_attr( $label ); ?>"
 					placeholder="<?php echo esc_attr__( 'Текст кнопки', 'art-starter' ); ?>"
+					data-art-starter-button-label
+					autocomplete="off"
 				>
 			</p>
 			<p class="art-starter-not-found-button-row__field">
@@ -163,6 +166,8 @@ class Art_Starter_Admin_Not_Found {
 					name="<?php echo esc_attr( $name_prefix . '[url]' ); ?>"
 					value="<?php echo esc_attr( $url ); ?>"
 					placeholder="<?php echo esc_attr__( 'example.com или https://...', 'art-starter' ); ?>"
+					data-art-starter-button-url
+					autocomplete="off"
 				>
 			</p>
 			<button type="button" class="button-link-delete art-starter-not-found-button-row__remove" aria-label="<?php echo esc_attr__( 'Удалить кнопку', 'art-starter' ); ?>">

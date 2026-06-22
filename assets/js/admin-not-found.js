@@ -17,6 +17,7 @@
 	}
 
 	var config = window.artStarterNotFoundAdmin || {};
+	var optionName = config.optionName || 'art_starter_not_found';
 	var strings = config.strings || {};
 	var icons = config.icons || {};
 	var iconCategories = config.iconCategories || {};
@@ -131,8 +132,8 @@
 		var items = [];
 
 		rows.forEach(function (row) {
-			var labelInput = row.querySelector('input[name*="[label]"]');
-			var urlInput = row.querySelector('input[name*="[url]"]');
+			var labelInput = row.querySelector('[data-art-starter-button-label]');
+			var urlInput = row.querySelector('[data-art-starter-button-url]');
 			var iconInput = row.querySelector('.art-starter-icon-field__input');
 
 			items.push({
@@ -348,6 +349,10 @@
 		activeIconField = null;
 	}
 
+	function extraButtonFieldName(index, field) {
+		return optionName + '[buttons][' + index + '][' + field + ']';
+	}
+
 	function reindexExtraButtons() {
 		if (!extraButtonsRoot) {
 			return;
@@ -356,9 +361,20 @@
 		var rows = extraButtonsRoot.querySelectorAll('[data-not-found-extra-button]');
 		rows.forEach(function (row, index) {
 			var buttonIndex = index + 1;
-			row.querySelectorAll('[name]').forEach(function (input) {
-				input.name = input.name.replace(/\[buttons\]\[\d+\]/, '[buttons][' + buttonIndex + ']');
-			});
+			var iconInput = row.querySelector('.art-starter-icon-field__input');
+			var labelInput = row.querySelector('[data-art-starter-button-label]');
+			var urlInput = row.querySelector('[data-art-starter-button-url]');
+
+			if (iconInput) {
+				iconInput.name = extraButtonFieldName(buttonIndex, 'icon');
+				iconInput.id = 'art-starter-not-found-extra-icon-' + buttonIndex;
+			}
+			if (labelInput) {
+				labelInput.name = extraButtonFieldName(buttonIndex, 'label');
+			}
+			if (urlInput) {
+				urlInput.name = extraButtonFieldName(buttonIndex, 'url');
+			}
 		});
 	}
 
@@ -379,9 +395,33 @@
 			return null;
 		}
 
-		var wrapper = document.createElement('div');
-		wrapper.innerHTML = extraButtonTemplate.innerHTML.trim();
-		var row = wrapper.firstElementChild;
+		var row;
+		if (extraButtonTemplate.content && extraButtonTemplate.content.firstElementChild) {
+			row = extraButtonTemplate.content.firstElementChild.cloneNode(true);
+		} else {
+			var wrapper = document.createElement('div');
+			wrapper.innerHTML = extraButtonTemplate.innerHTML.trim();
+			row = wrapper.firstElementChild;
+		}
+
+		if (!row) {
+			return null;
+		}
+
+		var iconInput = row.querySelector('.art-starter-icon-field__input');
+		var labelInput = row.querySelector('[data-art-starter-button-label]');
+		var urlInput = row.querySelector('[data-art-starter-button-url]');
+
+		if (iconInput) {
+			iconInput.value = extraDefaultIcon;
+		}
+		if (labelInput) {
+			labelInput.value = '';
+		}
+		if (urlInput) {
+			urlInput.value = '';
+		}
+
 		extraButtonsRoot.appendChild(row);
 		reindexExtraButtons();
 		updateAddButtonState();
@@ -406,6 +446,10 @@
 	});
 
 	updateAddButtonState();
+
+	form.addEventListener('submit', function () {
+		reindexExtraButtons();
+	});
 
 	form.addEventListener(
 		'input',
@@ -476,7 +520,7 @@
 			return;
 		}
 
-		var slug = safeText($(this).data('icon-slug'));
+		var slug = safeText($(this).attr('data-icon-slug'));
 		activeIconField.find('.art-starter-icon-field__input').val(slug);
 		updateIconFieldUI(activeIconField);
 		closeIconPicker();

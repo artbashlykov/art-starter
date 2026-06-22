@@ -377,6 +377,7 @@ class Art_Starter_Initial_Setup {
 		return array(
 			'site_title'       => (string) get_option( 'blogname' ),
 			'site_tagline'     => (string) get_option( 'blogdescription' ),
+			'site_icon'        => (int) get_option( 'site_icon', 0 ),
 			'technical'        => array(
 				'permalink_postname' => array(
 					'applied' => self::is_permalink_postname_enabled(),
@@ -447,6 +448,22 @@ class Art_Starter_Initial_Setup {
 		if ( null !== $site_tagline ) {
 			update_option( 'blogdescription', $site_tagline );
 			$results['updated'][] = __( 'Краткое описание сайта обновлено.', 'art-starter' );
+		}
+
+		if ( array_key_exists( 'site_icon', $input ) ) {
+			$site_icon = absint( $input['site_icon'] );
+
+			if ( $site_icon > 0 ) {
+				if ( wp_attachment_is_image( $site_icon ) ) {
+					update_option( 'site_icon', $site_icon );
+					$results['updated'][] = __( 'Фавикон сайта обновлён.', 'art-starter' );
+				} else {
+					$results['errors'][] = __( 'Не удалось установить фавикон: выбранный файл не является изображением.', 'art-starter' );
+				}
+			} elseif ( (int) get_option( 'site_icon', 0 ) > 0 ) {
+				delete_option( 'site_icon' );
+				$results['updated'][] = __( 'Фавикон сайта удалён.', 'art-starter' );
+			}
 		}
 
 		if ( ! empty( $input['apply_permalink_postname'] ) ) {
