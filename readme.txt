@@ -4,7 +4,7 @@ Tags: starter, onboarding, landing page, link in bio, 404
 Requires at least: 6.0
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 1.0.1
+Stable tag: 1.0.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -39,6 +39,11 @@ ART Starter is for people who want a minimal, fast launch: a simple homepage wit
 The homepage and custom 404 page use self-contained layouts. When enabled, ART Starter removes active theme styles on those pages so the design stays consistent.
 
 == Changelog ==
+
+= 1.0.2 =
+* Fix homepage links saving with split label/URL rows after form submit.
+* Re-index link fields on add, remove, reorder, and save.
+* Auto-repair legacy split link rows when loading settings.
 
 = 1.0.1 =
 * Fix 404 extra button icon and URL persistence when adding buttons.

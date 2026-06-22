@@ -275,7 +275,62 @@ class Art_Starter_Homepage {
 
 		unset( $settings['social'], $settings['social_icons'] );
 
+		if ( isset( $settings['links'] ) && is_array( $settings['links'] ) ) {
+			$settings['links'] = self::normalize_links( $settings['links'] );
+		}
+
 		return $settings;
+	}
+
+	/**
+	 * Repair links split across rows by legacy links[][] form parsing.
+	 *
+	 * @param array<int, mixed> $links Raw link rows.
+	 * @return array<int, array{label: string, url: string, icon: string}>
+	 */
+	private static function normalize_links( $links ) {
+		if ( ! is_array( $links ) ) {
+			return array();
+		}
+
+		$normalized = array();
+		$count      = count( $links );
+
+		for ( $i = 0; $i < $count; $i++ ) {
+			if ( ! is_array( $links[ $i ] ) ) {
+				continue;
+			}
+
+			$label = isset( $links[ $i ]['label'] ) ? (string) $links[ $i ]['label'] : '';
+			$url   = isset( $links[ $i ]['url'] ) ? (string) $links[ $i ]['url'] : '';
+			$icon  = isset( $links[ $i ]['icon'] ) ? (string) $links[ $i ]['icon'] : '';
+
+			if ( '' !== $label && '' === $url && ( $i + 1 ) < $count && is_array( $links[ $i + 1 ] ) ) {
+				$next_label = isset( $links[ $i + 1 ]['label'] ) ? (string) $links[ $i + 1 ]['label'] : '';
+				$next_url   = isset( $links[ $i + 1 ]['url'] ) ? (string) $links[ $i + 1 ]['url'] : '';
+
+				if ( '' === $next_label && '' !== $next_url ) {
+					$url = $next_url;
+					$next_icon = isset( $links[ $i + 1 ]['icon'] ) ? (string) $links[ $i + 1 ]['icon'] : '';
+					if ( '' === $icon && '' !== $next_icon ) {
+						$icon = $next_icon;
+					}
+					++$i;
+				}
+			}
+
+			if ( '' === $label && '' === $url ) {
+				continue;
+			}
+
+			$normalized[] = array(
+				'label' => $label,
+				'url'   => $url,
+				'icon'  => Art_Starter_Icons::resolve_link_icon( $icon ),
+			);
+		}
+
+		return $normalized;
 	}
 
 	/**

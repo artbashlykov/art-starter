@@ -221,11 +221,11 @@ $reading_url       = admin_url( 'options-reading.php' );
 					<div class="art-starter-links-list" id="art-starter-homepage-links">
 						<?php
 						if ( ! empty( $links ) ) {
-							foreach ( $links as $item ) {
+							foreach ( $links as $index => $item ) {
 								if ( ! is_array( $item ) ) {
 									continue;
 								}
-								Art_Starter_Admin_Homepage::render_link_row( $item );
+								Art_Starter_Admin_Homepage::render_link_row( $item, (int) $index );
 							}
 						}
 						?>

@@ -274,13 +274,15 @@ class Art_Starter_Admin_Homepage {
 	/**
 	 * Render a single dynamic link row.
 	 *
-	 * @param array<string, string> $item Link item.
+	 * @param array<string, string> $item  Link item.
+	 * @param int|null              $index Row index for stable field names.
 	 */
-	public static function render_link_row( $item = array() ) {
+	public static function render_link_row( $item = array(), $index = null ) {
 		$option_name = Art_Starter_Homepage::OPTION;
 		$label       = isset( $item['label'] ) ? (string) $item['label'] : '';
 		$url         = isset( $item['url'] ) ? (string) $item['url'] : '';
 		$icon        = isset( $item['icon'] ) ? (string) $item['icon'] : '';
+		$row_index   = null === $index ? '' : '[' . (int) $index . ']';
 
 		?>
 		<div class="art-starter-link-row">
@@ -288,7 +290,7 @@ class Art_Starter_Admin_Homepage {
 			<div class="art-starter-link-row__icon">
 				<?php
 				self::render_icon_field(
-					$option_name . '[links][][icon]',
+					$option_name . '[links]' . $row_index . '[icon]',
 					$icon,
 					array(
 						'categories'   => Art_Starter_Icons::get_picker_categories(),
@@ -303,9 +305,11 @@ class Art_Starter_Admin_Homepage {
 					<input
 						type="text"
 						class="art-starter-field"
-						name="<?php echo esc_attr( $option_name ); ?>[links][][label]"
+						name="<?php echo esc_attr( $option_name ); ?>[links]<?php echo esc_attr( $row_index ); ?>[label]"
 						value="<?php echo esc_attr( $label ); ?>"
 						placeholder="<?php echo esc_attr__( 'Текст ссылки', 'art-starter' ); ?>"
+						data-art-starter-link-label
+						autocomplete="off"
 					>
 				</p>
 				<p class="art-starter-link-row__field">
@@ -313,9 +317,11 @@ class Art_Starter_Admin_Homepage {
 					<input
 						type="text"
 						class="art-starter-field"
-						name="<?php echo esc_attr( $option_name ); ?>[links][][url]"
+						name="<?php echo esc_attr( $option_name ); ?>[links]<?php echo esc_attr( $row_index ); ?>[url]"
 						value="<?php echo esc_attr( $url ); ?>"
 						placeholder="<?php echo esc_attr__( 'example.com или https://...', 'art-starter' ); ?>"
+						data-art-starter-link-url
+						autocomplete="off"
 					>
 				</p>
 			</div>

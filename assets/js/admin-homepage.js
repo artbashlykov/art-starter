@@ -419,8 +419,8 @@
 
 		var rows = form.querySelectorAll('.art-starter-link-row');
 		rows.forEach(function (row) {
-			var labelEl = row.querySelector('input[name$="[label]"]');
-			var urlEl = row.querySelector('input[name$="[url]"]');
+			var labelEl = row.querySelector('[data-art-starter-link-label]');
+			var urlEl = row.querySelector('[data-art-starter-link-url]');
 			var iconEl = row.querySelector('.art-starter-icon-field__input');
 
 			state.links.push({
@@ -671,23 +671,50 @@
 		return row;
 	}
 
+	function linkRowFieldName(index, field) {
+		return optionName + '[links][' + index + '][' + field + ']';
+	}
+
+	function reindexLinkRows() {
+		if (!linksRoot) {
+			return;
+		}
+
+		linksRoot.querySelectorAll('.art-starter-link-row').forEach(function (row, index) {
+			var iconInput = row.querySelector('.art-starter-icon-field__input');
+			var labelInput = row.querySelector('[data-art-starter-link-label]');
+			var urlInput = row.querySelector('[data-art-starter-link-url]');
+
+			if (iconInput) {
+				iconInput.name = linkRowFieldName(index, 'icon');
+			}
+			if (labelInput) {
+				labelInput.name = linkRowFieldName(index, 'label');
+			}
+			if (urlInput) {
+				urlInput.name = linkRowFieldName(index, 'url');
+			}
+		});
+	}
+
 	function createLinkRow() {
+		var index = linksRoot ? linksRoot.querySelectorAll('.art-starter-link-row').length : 0;
 		var row = document.createElement('div');
 		row.className = 'art-starter-link-row';
 
 		row.innerHTML =
 			buildSortButtonsHTML() +
 			'<div class="art-starter-link-row__icon">' +
-				buildIconFieldHTML(optionName + '[links][][icon]', iconPickerCategories, linkDefaultIcon) +
+				buildIconFieldHTML(linkRowFieldName(index, 'icon'), iconPickerCategories, linkDefaultIcon) +
 			'</div>' +
 			'<div class="art-starter-link-row__fields">' +
 				'<p class="art-starter-link-row__field">' +
 					'<label class="screen-reader-text">' + (strings.linkText || 'Текст ссылки') + '</label>' +
-					'<input type="text" class="art-starter-field" name="' + optionName + '[links][][label]" placeholder="' + (strings.linkText || 'Текст ссылки') + '">' +
+					'<input type="text" class="art-starter-field" name="' + linkRowFieldName(index, 'label') + '" placeholder="' + (strings.linkText || 'Текст ссылки') + '" data-art-starter-link-label autocomplete="off">' +
 				'</p>' +
 				'<p class="art-starter-link-row__field">' +
 					'<label class="screen-reader-text">' + (strings.linkUrl || 'URL') + '</label>' +
-					'<input type="text" class="art-starter-field" name="' + optionName + '[links][][url]" placeholder="' + (strings.linkUrlPlaceholder || 'example.com или https://...') + '">' +
+					'<input type="text" class="art-starter-field" name="' + linkRowFieldName(index, 'url') + '" placeholder="' + (strings.linkUrlPlaceholder || 'example.com или https://...') + '" data-art-starter-link-url autocomplete="off">' +
 				'</p>' +
 			'</div>' +
 			'<button type="button" class="button-link-delete art-starter-link-row__remove" aria-label="' + (strings.removeLinkAria || 'Удалить ссылку') + '">' +
@@ -786,6 +813,7 @@
 	updateAddSocialButton();
 
 	form.addEventListener('submit', function () {
+		reindexLinkRows();
 		reindexSocialRows();
 		syncSocialsPayload();
 	});
@@ -802,6 +830,7 @@
 		addLinkBtn.addEventListener('click', function () {
 			var row = createLinkRow();
 			linksRoot.appendChild(row);
+			reindexLinkRows();
 			var firstInput = row.querySelector('input[type="text"]');
 			if (firstInput) {
 				firstInput.focus();
@@ -839,6 +868,7 @@
 				var sortRow = target.closest('.art-starter-link-row');
 				if (sortRow) {
 					moveRow(sortRow, target.classList.contains('art-starter-sortable-row__up') ? -1 : 1);
+					reindexLinkRows();
 					triggerPreviewUpdate();
 				}
 				return;
@@ -851,6 +881,7 @@
 			var row = target.closest('.art-starter-link-row');
 			if (row && row.parentNode) {
 				row.parentNode.removeChild(row);
+				reindexLinkRows();
 				triggerPreviewUpdate();
 			}
 		});
