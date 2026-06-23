@@ -14,7 +14,7 @@ $removable = $form_state['removable'];
 
 ?>
 <div class="wrap art-starter-admin">
-	<h1><?php esc_html_e( 'Первичные настройки', 'art-starter' ); ?></h1>
+	<h1><?php esc_html_e( 'Настройки', 'art-starter' ); ?></h1>
 
 	<p class="description">
 		<?php esc_html_e( 'Базовые настройки для нового сайта. Технические опции меняют только значения по умолчанию WordPress. Удаление затрагивает лишь распознанный демо-контент — перед применением проверьте список ниже.', 'art-starter' ); ?>
@@ -185,7 +185,7 @@ $removable = $form_state['removable'];
 		<div class="art-starter-panel">
 			<h2><?php esc_html_e( 'Удаление мусора', 'art-starter' ); ?></h2>
 			<p class="description">
-				<?php esc_html_e( 'Плагин удаляет только стандартный демо-контент WordPress, который не был изменён и не используется сайтом. Если элемент не найден, удаление будет пропущено.', 'art-starter' ); ?>
+				<?php esc_html_e( 'Плагин удаляет только стандартный демо-контент WordPress, стартовые плагины и неактивные темы, которые не используются сайтом. Если элемент не найден, удаление будет пропущено.', 'art-starter' ); ?>
 			</p>
 
 			<div class="art-starter-checkbox-list">
@@ -263,6 +263,32 @@ $removable = $form_state['removable'];
 					<?php else : ?>
 						<p class="art-starter-removable-empty">
 							<?php esc_html_e( 'Неактивные стандартные темы WordPress не найдены — удалять нечего.', 'art-starter' ); ?>
+						</p>
+					<?php endif; ?>
+				</div>
+
+				<div class="art-starter-checkbox-item art-starter-checkbox-item--block">
+					<label>
+						<input
+							type="checkbox"
+							name="delete_default_plugins"
+							value="1"
+							<?php disabled( empty( $removable['plugins'] ) ); ?>
+						>
+						<span class="art-starter-checkbox-item__label">
+							<strong><?php esc_html_e( 'Удалить стартовые плагины', 'art-starter' ); ?></strong>
+						</span>
+					</label>
+					<?php if ( ! empty( $removable['plugins'] ) ) : ?>
+						<?php
+						Art_Starter_Admin_Initial_Setup::render_removable_plugins_preview(
+							$removable['plugins'],
+							__( 'Будут удалены неактивные стандартные плагины WordPress:', 'art-starter' )
+						);
+						?>
+					<?php else : ?>
+						<p class="art-starter-removable-empty">
+							<?php esc_html_e( 'Akismet и Hello Dolly не найдены, активны или уже удалены — удалять нечего.', 'art-starter' ); ?>
 						</p>
 					<?php endif; ?>
 				</div>

@@ -42,8 +42,8 @@ class Art_Starter_Admin_Menu {
 
 		add_submenu_page(
 			self::MENU_SLUG,
-			__( 'Первичные настройки', 'art-starter' ),
-			__( 'Первичные настройки', 'art-starter' ),
+			__( 'Настройки', 'art-starter' ),
+			__( 'Настройки', 'art-starter' ),
 			'manage_options',
 			Art_Starter_Admin_Initial_Setup::PAGE_SLUG,
 			array( 'Art_Starter_Admin_Initial_Setup', 'render_page' )
@@ -253,7 +253,7 @@ class Art_Starter_Admin_Menu {
 		$settings_link = sprintf(
 			'<a href="%s">%s</a>',
 			esc_url( admin_url( 'admin.php?page=' . Art_Starter_Admin_Initial_Setup::PAGE_SLUG ) ),
-			esc_html__( 'Первичные настройки', 'art-starter' )
+			esc_html__( 'Настройки', 'art-starter' )
 		);
 
 		return array_merge( array( $settings_link ), $links );

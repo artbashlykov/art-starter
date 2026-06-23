@@ -18,7 +18,7 @@ defined( 'ABSPATH' ) || exit;
 		</p>
 		<p>
 			<a class="button button-primary" href="<?php echo esc_url( admin_url( 'admin.php?page=' . Art_Starter_Admin_Initial_Setup::PAGE_SLUG ) ); ?>">
-				<?php esc_html_e( 'Первичные настройки', 'art-starter' ); ?>
+				<?php esc_html_e( 'Настройки', 'art-starter' ); ?>
 			</a>
 			<a class="button" href="<?php echo esc_url( admin_url( 'admin.php?page=' . Art_Starter_Admin_Homepage::PAGE_SLUG ) ); ?>">
 				<?php esc_html_e( 'Главная страница', 'art-starter' ); ?>

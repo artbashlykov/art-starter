@@ -181,12 +181,30 @@ class Art_Starter_Homepage {
 	private static $applying_reading_settings = false;
 
 	/**
+	 * Skip homepage activation while auto-unchecking the front page flag.
+	 *
+	 * @var bool
+	 */
+	private static $clearing_use_as_front_page_flag = false;
+
+	/**
+	 * Skip homepage activation while Reading options are being changed.
+	 *
+	 * @var bool
+	 */
+	private static $syncing_reading_settings = false;
+
+	/**
 	 * Register hooks.
 	 */
 	public static function init() {
 		add_action( 'update_option_' . self::OPTION, array( __CLASS__, 'on_option_updated' ), 10, 2 );
+		add_filter( 'pre_update_option_show_on_front', array( __CLASS__, 'on_reading_show_on_front_will_change' ), 10, 2 );
+		add_filter( 'pre_update_option_page_on_front', array( __CLASS__, 'on_reading_page_on_front_will_change' ), 10, 2 );
 		add_action( 'update_option_show_on_front', array( __CLASS__, 'on_reading_show_on_front_changed' ), 10, 2 );
 		add_action( 'update_option_page_on_front', array( __CLASS__, 'on_reading_page_on_front_changed' ), 10, 2 );
+		add_action( 'admin_init', array( __CLASS__, 'sync_front_page_flag_with_reading' ), 5 );
+		add_action( 'template_redirect', array( __CLASS__, 'sync_front_page_flag_with_reading' ), 0 );
 		add_action( 'template_redirect', array( __CLASS__, 'maybe_render_front_page' ), 1 );
 	}
 
@@ -431,6 +449,10 @@ class Art_Starter_Homepage {
 	 * Whether ART Starter homepage is assigned as the site front page.
 	 */
 	public static function is_active_as_front_page() {
+		if ( 'page' === get_option( 'show_on_front' ) ) {
+			return false;
+		}
+
 		$settings = self::get_all();
 
 		if ( empty( $settings['use_as_front_page'] ) ) {
@@ -444,14 +466,16 @@ class Art_Starter_Homepage {
 	 * Sync checkbox state when Reading settings were changed elsewhere.
 	 */
 	public static function sync_front_page_flag_with_reading() {
-		$settings = self::get_all();
+		$settings = get_option( self::OPTION, array() );
 
-		if ( empty( $settings['use_as_front_page'] ) ) {
+		if ( ! is_array( $settings ) || empty( $settings['use_as_front_page'] ) ) {
 			return;
 		}
 
-		if ( 'page' === get_option( 'show_on_front' ) && (int) get_option( 'page_on_front' ) > 0 ) {
+		if ( 'page' === get_option( 'show_on_front' ) ) {
+			self::$syncing_reading_settings = true;
 			self::clear_use_as_front_page_flag();
+			self::$syncing_reading_settings = false;
 		}
 	}
 
@@ -668,11 +692,66 @@ class Art_Starter_Homepage {
 	 * @param mixed $value     New option value.
 	 */
 	public static function on_option_updated( $old_value, $value ) {
+		if ( self::$clearing_use_as_front_page_flag || self::$syncing_reading_settings || self::$applying_reading_settings ) {
+			return;
+		}
+
 		if ( ! is_array( $value ) || empty( $value['use_as_front_page'] ) ) {
 			return;
 		}
 
+		$was_enabled = is_array( $old_value ) && ! empty( $old_value['use_as_front_page'] );
+		if ( $was_enabled ) {
+			return;
+		}
+
 		self::activate_as_front_page();
+	}
+
+	/**
+	 * Uncheck ART Starter front page before Reading switches to a static page.
+	 *
+	 * @param mixed $value     New option value.
+	 * @param mixed $old_value Old option value.
+	 * @return mixed
+	 */
+	public static function on_reading_show_on_front_will_change( $value, $old_value ) {
+		unset( $old_value );
+
+		if ( self::$applying_reading_settings ) {
+			return $value;
+		}
+
+		if ( 'page' === $value ) {
+			self::$syncing_reading_settings = true;
+			self::clear_use_as_front_page_flag();
+			self::$syncing_reading_settings = false;
+		}
+
+		return $value;
+	}
+
+	/**
+	 * Uncheck ART Starter front page before a static page is selected.
+	 *
+	 * @param mixed $value     New option value.
+	 * @param mixed $old_value Old option value.
+	 * @return mixed
+	 */
+	public static function on_reading_page_on_front_will_change( $value, $old_value ) {
+		unset( $old_value );
+
+		if ( self::$applying_reading_settings ) {
+			return $value;
+		}
+
+		if ( (int) $value > 0 && 'page' === get_option( 'show_on_front' ) ) {
+			self::$syncing_reading_settings = true;
+			self::clear_use_as_front_page_flag();
+			self::$syncing_reading_settings = false;
+		}
+
+		return $value;
 	}
 
 	/**
@@ -687,7 +766,9 @@ class Art_Starter_Homepage {
 		}
 
 		if ( 'page' === $value ) {
+			self::$syncing_reading_settings = true;
 			self::clear_use_as_front_page_flag();
+			self::$syncing_reading_settings = false;
 		}
 	}
 
@@ -703,7 +784,9 @@ class Art_Starter_Homepage {
 		}
 
 		if ( (int) $value > 0 && 'page' === get_option( 'show_on_front' ) ) {
+			self::$syncing_reading_settings = true;
 			self::clear_use_as_front_page_flag();
+			self::$syncing_reading_settings = false;
 		}
 	}
 
@@ -711,7 +794,11 @@ class Art_Starter_Homepage {
 	 * Render ART Starter homepage on the site front page.
 	 */
 	public static function maybe_render_front_page() {
-		if ( is_admin() || ! is_front_page() || ! self::is_active_as_front_page() ) {
+		if ( is_admin() || 'page' === get_option( 'show_on_front' ) ) {
+			return;
+		}
+
+		if ( ! is_front_page() || ! self::is_active_as_front_page() ) {
 			return;
 		}
 
@@ -762,6 +849,11 @@ class Art_Starter_Homepage {
 		}
 
 		$settings['use_as_front_page'] = false;
+
+		self::$clearing_use_as_front_page_flag = true;
+		remove_action( 'update_option_' . self::OPTION, array( __CLASS__, 'on_option_updated' ), 10 );
 		update_option( self::OPTION, $settings );
+		add_action( 'update_option_' . self::OPTION, array( __CLASS__, 'on_option_updated' ), 10, 2 );
+		self::$clearing_use_as_front_page_flag = false;
 	}
 }

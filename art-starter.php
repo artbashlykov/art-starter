@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       ART Starter
  * Description:       Быстрая настройка нового сайта WordPress: простая главная страница-визитка со ссылками и страница 404.
- * Version:           1.0.2
+ * Version:           1.0.3
  * Requires at least: 6.0
  * Requires PHP:      7.4
  * Author:            Арт Башлыков
@@ -16,7 +16,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'ART_STARTER_VERSION', '1.0.2' );
+define( 'ART_STARTER_VERSION', '1.0.3' );
 define( 'ART_STARTER_ADMIN_MENU_SLUG', 'art-starter' );
 define( 'ART_STARTER_AUTHOR_URL', 'https://forge.artbashlykov.ru' );
 define( 'ART_STARTER_PLUGIN_FILE', __FILE__ );

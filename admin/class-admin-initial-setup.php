@@ -185,4 +185,39 @@ class Art_Starter_Admin_Initial_Setup {
 		</div>
 		<?php
 	}
+
+	/**
+	 * Render preview for removable default plugins.
+	 *
+	 * @param array<int, array<string, string>> $plugins Plugin list.
+	 * @param string                            $caption Preview caption.
+	 */
+	public static function render_removable_plugins_preview( $plugins, $caption ) {
+		if ( empty( $plugins ) || ! is_array( $plugins ) ) {
+			return;
+		}
+
+		?>
+		<div class="art-starter-removable-preview">
+			<p class="art-starter-removable-preview__caption"><?php echo esc_html( $caption ); ?></p>
+			<ul class="art-starter-removable-preview__list">
+				<?php foreach ( $plugins as $plugin ) : ?>
+					<li>
+						<strong><?php echo esc_html( $plugin['name'] ); ?></strong>
+						<span class="art-starter-removable-preview__meta">
+							<?php
+							printf(
+								/* translators: 1: plugin slug, 2: plugin version */
+								esc_html__( 'slug: %1$s, версия: %2$s', 'art-starter' ),
+								esc_html( $plugin['slug'] ),
+								esc_html( $plugin['version'] )
+							);
+							?>
+						</span>
+					</li>
+				<?php endforeach; ?>
+			</ul>
+		</div>
+		<?php
+	}
 }

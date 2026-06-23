@@ -335,6 +335,84 @@ class Art_Starter_Initial_Setup {
 	}
 
 	/**
+	 * Default bundled plugins that can be removed during setup.
+	 *
+	 * @return array<int, string>
+	 */
+	private static function get_default_removable_plugin_files() {
+		return array(
+			'akismet/akismet.php',
+			'hello-dolly/hello.php',
+		);
+	}
+
+	/**
+	 * @param string               $plugin_file Plugin basename.
+	 * @param array<string, mixed> $plugin_data Plugin header data.
+	 * @return bool
+	 */
+	private static function is_removable_default_plugin( $plugin_file, $plugin_data ) {
+		if ( ! in_array( $plugin_file, self::get_default_removable_plugin_files(), true ) ) {
+			return false;
+		}
+
+		if ( ! is_array( $plugin_data ) ) {
+			return false;
+		}
+
+		if ( is_plugin_active( $plugin_file ) ) {
+			return false;
+		}
+
+		$name = isset( $plugin_data['Name'] ) ? self::normalize_text( (string) $plugin_data['Name'] ) : '';
+
+		if ( 'akismet/akismet.php' === $plugin_file ) {
+			return false !== stripos( $name, 'akismet' );
+		}
+
+		if ( 'hello-dolly/hello.php' === $plugin_file ) {
+			return false !== stripos( $name, 'hello dolly' );
+		}
+
+		return false;
+	}
+
+	/**
+	 * Find inactive default WordPress plugins that are safe to remove.
+	 *
+	 * @return array<int, array<string, string>>
+	 */
+	public static function find_removable_plugins() {
+		if ( ! function_exists( 'get_plugins' ) ) {
+			require_once ABSPATH . 'wp-admin/includes/plugin.php';
+		}
+
+		$items = array();
+
+		foreach ( get_plugins() as $plugin_file => $plugin_data ) {
+			if ( ! self::is_removable_default_plugin( $plugin_file, $plugin_data ) ) {
+				continue;
+			}
+
+			$items[] = array(
+				'file'    => $plugin_file,
+				'slug'    => dirname( $plugin_file ),
+				'name'    => (string) $plugin_data['Name'],
+				'version' => (string) $plugin_data['Version'],
+			);
+		}
+
+		usort(
+			$items,
+			static function ( $left, $right ) {
+				return strnatcasecmp( $left['name'], $right['name'] );
+			}
+		);
+
+		return $items;
+	}
+
+	/**
 	 * @return bool
 	 */
 	public static function is_permalink_postname_enabled() {
@@ -373,6 +451,7 @@ class Art_Starter_Initial_Setup {
 		$hello_post   = self::find_hello_post();
 		$sample_page  = self::find_sample_page();
 		$themes       = self::find_removable_themes();
+		$plugins      = self::find_removable_plugins();
 
 		return array(
 			'site_title'       => (string) get_option( 'blogname' ),
@@ -397,6 +476,7 @@ class Art_Starter_Initial_Setup {
 				'hello_post'  => self::format_post_preview( $hello_post ),
 				'sample_page' => self::format_post_preview( $sample_page ),
 				'themes'      => $themes,
+				'plugins'     => $plugins,
 			),
 		);
 	}
@@ -544,6 +624,11 @@ class Art_Starter_Initial_Setup {
 			$results       = self::merge_apply_results( $results, $theme_results );
 		}
 
+		if ( ! empty( $input['delete_default_plugins'] ) ) {
+			$plugin_results = self::delete_removable_plugins();
+			$results        = self::merge_apply_results( $results, $plugin_results );
+		}
+
 		return $results;
 	}
 
@@ -588,6 +673,52 @@ class Art_Starter_Initial_Setup {
 			} else {
 				/* translators: %s: theme name */
 				$results['errors'][] = sprintf( __( 'Не удалось удалить тему «%s».', 'art-starter' ), $theme['name'] );
+			}
+		}
+
+		return $results;
+	}
+
+	/**
+	 * @return array<string, mixed>
+	 */
+	private static function delete_removable_plugins() {
+		if ( ! function_exists( 'delete_plugins' ) ) {
+			require_once ABSPATH . 'wp-admin/includes/plugin.php';
+		}
+
+		$results = array(
+			'updated' => array(),
+			'skipped' => array(),
+			'errors'  => array(),
+		);
+
+		$plugins = self::find_removable_plugins();
+
+		if ( empty( $plugins ) ) {
+			$results['skipped'][] = __( 'Стартовые плагины WordPress не найдены.', 'art-starter' );
+			return $results;
+		}
+
+		foreach ( $plugins as $plugin ) {
+			$result = delete_plugins( array( $plugin['file'] ) );
+
+			if ( true === $result ) {
+				/* translators: %s: plugin name */
+				$results['updated'][] = sprintf( __( 'Удалён плагин «%s».', 'art-starter' ), $plugin['name'] );
+				continue;
+			}
+
+			if ( is_wp_error( $result ) ) {
+				$results['errors'][] = sprintf(
+					/* translators: 1: plugin name, 2: error message */
+					__( 'Не удалось удалить плагин «%1$s»: %2$s', 'art-starter' ),
+					$plugin['name'],
+					$result->get_error_message()
+				);
+			} else {
+				/* translators: %s: plugin name */
+				$results['errors'][] = sprintf( __( 'Не удалось удалить плагин «%s».', 'art-starter' ), $plugin['name'] );
 			}
 		}
 
