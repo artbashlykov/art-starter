@@ -1,8 +1,8 @@
 <?php
 /**
  * Plugin Name:       ART Starter
- * Description:       Быстрая настройка нового сайта WordPress: простая главная страница-визитка со ссылками и страница 404.
- * Version:           1.0.3
+ * Description:       Плагин, который позволяет быстро настроить техническую часть сайта, настроить главную страницу (в формате удобной визитки на 7 шаблонов) и настроить страницу 404.
+ * Version:           1.0.4
  * Requires at least: 6.0
  * Requires PHP:      7.4
  * Author:            Арт Башлыков
@@ -16,7 +16,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'ART_STARTER_VERSION', '1.0.3' );
+define( 'ART_STARTER_VERSION', '1.0.4' );
 define( 'ART_STARTER_ADMIN_MENU_SLUG', 'art-starter' );
 define( 'ART_STARTER_AUTHOR_URL', 'https://forge.artbashlykov.ru' );
 define( 'ART_STARTER_PLUGIN_FILE', __FILE__ );

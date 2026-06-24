@@ -443,6 +443,53 @@ class Art_Starter_Initial_Setup {
 	}
 
 	/**
+	 * Whether site and WordPress URLs in the database use HTTPS.
+	 *
+	 * @return bool
+	 */
+	public static function is_site_urls_https_enabled() {
+		$home    = (string) get_option( 'home' );
+		$siteurl = (string) get_option( 'siteurl' );
+
+		return 'https' === wp_parse_url( $home, PHP_URL_SCHEME )
+			&& 'https' === wp_parse_url( $siteurl, PHP_URL_SCHEME );
+	}
+
+	/**
+	 * Whether home/siteurl are overridden in wp-config.php.
+	 *
+	 * @return bool
+	 */
+	public static function are_site_urls_locked_by_constants() {
+		return defined( 'WP_HOME' ) || defined( 'WP_SITEURL' );
+	}
+
+	/**
+	 * Switch home and siteurl options from HTTP to HTTPS.
+	 *
+	 * @return bool Whether any option was updated.
+	 */
+	private static function switch_site_urls_to_https() {
+		if ( function_exists( 'wp_update_urls_to_https' ) ) {
+			return (bool) wp_update_urls_to_https();
+		}
+
+		$home        = (string) get_option( 'home' );
+		$siteurl     = (string) get_option( 'siteurl' );
+		$https_home  = (string) set_url_scheme( $home, 'https' );
+		$https_admin = (string) set_url_scheme( $siteurl, 'https' );
+
+		if ( $https_home === $home && $https_admin === $siteurl ) {
+			return false;
+		}
+
+		update_option( 'home', $https_home );
+		update_option( 'siteurl', $https_admin );
+
+		return true;
+	}
+
+	/**
 	 * Build preview data for the admin page.
 	 *
 	 * @return array<string, mixed>
@@ -461,6 +508,12 @@ class Art_Starter_Initial_Setup {
 				'permalink_postname' => array(
 					'applied' => self::is_permalink_postname_enabled(),
 					'label'   => self::PERMALINK_STRUCTURE,
+				),
+				'https_site_urls'    => array(
+					'applied' => self::is_site_urls_https_enabled(),
+					'locked'  => self::are_site_urls_locked_by_constants(),
+					'home'    => (string) get_option( 'home' ),
+					'siteurl' => (string) get_option( 'siteurl' ),
 				),
 				'disable_comments'   => array(
 					'applied' => self::are_comments_disabled(),
@@ -553,6 +606,18 @@ class Art_Starter_Initial_Setup {
 				update_option( 'permalink_structure', self::PERMALINK_STRUCTURE );
 				flush_rewrite_rules();
 				$results['updated'][] = __( 'Постоянные ссылки переключены на «Название записи».', 'art-starter' );
+			}
+		}
+
+		if ( ! empty( $input['apply_https_site_urls'] ) ) {
+			if ( self::are_site_urls_locked_by_constants() ) {
+				$results['errors'][] = __( 'Адреса заданы в wp-config.php (WP_HOME / WP_SITEURL) — измените их вручную в конфигурации.', 'art-starter' );
+			} elseif ( self::is_site_urls_https_enabled() ) {
+				$results['skipped'][] = __( 'Адреса сайта и панели WordPress уже используют HTTPS.', 'art-starter' );
+			} elseif ( self::switch_site_urls_to_https() ) {
+				$results['updated'][] = __( 'Адреса сайта и панели WordPress переключены на HTTPS (Настройки → Общие).', 'art-starter' );
+			} else {
+				$results['errors'][] = __( 'Не удалось переключить адреса на HTTPS.', 'art-starter' );
 			}
 		}
 

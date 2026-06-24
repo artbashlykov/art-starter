@@ -117,6 +117,37 @@ $removable = $form_state['removable'];
 				<label class="art-starter-checkbox-item">
 					<input
 						type="checkbox"
+						name="apply_https_site_urls"
+						value="1"
+						<?php checked( ! $technical['https_site_urls']['applied'] && ! $technical['https_site_urls']['locked'] ); ?>
+						<?php disabled( $technical['https_site_urls']['applied'] || $technical['https_site_urls']['locked'] ); ?>
+					>
+					<span class="art-starter-checkbox-item__label">
+						<strong><?php esc_html_e( 'Адреса сайта: HTTPS', 'art-starter' ); ?></strong>
+						<span class="description">
+							<?php
+							if ( $technical['https_site_urls']['locked'] ) {
+								esc_html_e( 'Адреса заданы константами WP_HOME / WP_SITEURL в wp-config.php — измените их вручную в конфигурации.', 'art-starter' );
+							} elseif ( $technical['https_site_urls']['applied'] ) {
+								esc_html_e( 'Уже применено: оба адреса в Настройки → Общие используют HTTPS.', 'art-starter' );
+							} else {
+								echo esc_html(
+									sprintf(
+										/* translators: 1: site URL, 2: WordPress URL */
+										__( 'Переключит «Адрес сайта» (%1$s) и «Адрес WordPress» (%2$s) с HTTP на HTTPS. Редирект не включается.', 'art-starter' ),
+										$technical['https_site_urls']['home'],
+										$technical['https_site_urls']['siteurl']
+									)
+								);
+							}
+							?>
+						</span>
+					</span>
+				</label>
+
+				<label class="art-starter-checkbox-item">
+					<input
+						type="checkbox"
 						name="apply_disable_comments"
 						value="1"
 						<?php checked( ! $technical['disable_comments']['applied'] ); ?>

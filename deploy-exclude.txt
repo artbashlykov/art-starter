@@ -1,7 +1,8 @@
-# Exclude from WordPress.org plugin zip (see https://developer.wordpress.org/plugins/wordpress-org/how-to-use-subversion/#ignore).
+# Excluded from WordPress.org plugin zip (and Plugin Check when using this list).
 .git
 .gitignore
 .distignore
+deploy-exclude.txt
 .github/
 .cursor/
 .idea/
@@ -22,4 +23,5 @@ node_modules/
 tmp-*.php
 local-*.php
 README.md
+scripts/
 vendor/
