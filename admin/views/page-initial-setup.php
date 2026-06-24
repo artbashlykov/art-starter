@@ -93,7 +93,6 @@ $removable = $form_state['removable'];
 						type="checkbox"
 						name="apply_permalink_postname"
 						value="1"
-						<?php checked( ! $technical['permalink_postname']['applied'] ); ?>
 						<?php disabled( $technical['permalink_postname']['applied'] ); ?>
 					>
 					<span class="art-starter-checkbox-item__label">
@@ -119,7 +118,6 @@ $removable = $form_state['removable'];
 						type="checkbox"
 						name="apply_https_site_urls"
 						value="1"
-						<?php checked( ! $technical['https_site_urls']['applied'] && ! $technical['https_site_urls']['locked'] ); ?>
 						<?php disabled( $technical['https_site_urls']['applied'] || $technical['https_site_urls']['locked'] ); ?>
 					>
 					<span class="art-starter-checkbox-item__label">
@@ -134,7 +132,7 @@ $removable = $form_state['removable'];
 								echo esc_html(
 									sprintf(
 										/* translators: 1: site URL, 2: WordPress URL */
-										__( 'Переключит «Адрес сайта» (%1$s) и «Адрес WordPress» (%2$s) с HTTP на HTTPS. Редирект не включается.', 'art-starter' ),
+										__( 'Переключит «Адрес сайта» (%1$s) и «Адрес WordPress» (%2$s) с HTTP на HTTPS.', 'art-starter' ),
 										$technical['https_site_urls']['home'],
 										$technical['https_site_urls']['siteurl']
 									)
@@ -150,7 +148,6 @@ $removable = $form_state['removable'];
 						type="checkbox"
 						name="apply_disable_comments"
 						value="1"
-						<?php checked( ! $technical['disable_comments']['applied'] ); ?>
 						<?php disabled( $technical['disable_comments']['applied'] ); ?>
 					>
 					<span class="art-starter-checkbox-item__label">
@@ -172,7 +169,6 @@ $removable = $form_state['removable'];
 						type="checkbox"
 						name="apply_disable_pingbacks"
 						value="1"
-						<?php checked( ! $technical['disable_pingbacks']['applied'] ); ?>
 						<?php disabled( $technical['disable_pingbacks']['applied'] ); ?>
 					>
 					<span class="art-starter-checkbox-item__label">
@@ -194,7 +190,6 @@ $removable = $form_state['removable'];
 						type="checkbox"
 						name="apply_disable_registration"
 						value="1"
-						<?php checked( ! $technical['disable_registration']['applied'] ); ?>
 						<?php disabled( $technical['disable_registration']['applied'] ); ?>
 					>
 					<span class="art-starter-checkbox-item__label">

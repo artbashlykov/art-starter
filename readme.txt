@@ -4,19 +4,20 @@ Tags: starter, onboarding, landing page, link in bio, 404
 Requires at least: 6.0
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 1.0.4
+Stable tag: 1.0.5
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-Quick WordPress site setup with a simple link-in-bio homepage and a custom 404 page.
+Configure technical site settings, a link-in-bio homepage with 7 templates, and a custom 404 page.
 
 == Description ==
 
-ART Starter helps you launch a new WordPress site faster: set up a simple homepage with links (like a TypeLink-style landing page) and a dedicated 404 page.
+ART Starter helps you quickly configure the technical side of a new WordPress site, set up a homepage as a handy link-in-bio page with seven templates, and customize the 404 page.
 
 Main features:
 
-* Guided initial setup wizard for a fresh WordPress site
+* Initial setup wizard: site title, favicon, technical options, and demo content cleanup
+* Technical settings: permalinks, HTTPS URLs, comments, pingbacks, and registration
 * Link-in-bio style homepage with profile, CTA, links, recommendation block, and socials
 * Seven color templates with live admin preview
 * Custom 404 page with image, text, and buttons
@@ -32,13 +33,18 @@ Main features:
 
 = What is ART Starter for? =
 
-ART Starter is for people who want a minimal, fast launch: a simple homepage with links and a polished 404 page without building a full theme.
+ART Starter is for people who want a fast launch: technical WordPress settings, a simple homepage with seven templates, and a polished 404 page without building a full theme.
 
 = Does the plugin depend on my theme? =
 
 The homepage and custom 404 page use self-contained layouts. When enabled, ART Starter removes active theme styles on those pages so the design stays consistent.
 
 == Changelog ==
+
+= 1.0.5 =
+* Sync plugin descriptions on the dashboard, README, and readme.txt.
+* Technical settings checkboxes are unchecked by default.
+* Shorten the HTTPS option hint in initial setup.
 
 = 1.0.4 =
 * Add optional HTTPS switch for site and WordPress URLs in initial setup (Settings → General).
