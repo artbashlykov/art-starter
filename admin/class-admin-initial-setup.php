@@ -12,8 +12,6 @@ defined( 'ABSPATH' ) || exit;
  */
 class Art_Starter_Admin_Initial_Setup {
 
-	const PAGE_SLUG = 'art-starter-initial-setup';
-
 	const ACTION = 'art_starter_initial_setup';
 
 	/**
@@ -46,6 +44,11 @@ class Art_Starter_Admin_Initial_Setup {
 
 		check_admin_referer( self::ACTION );
 
+		Art_Starter_Settings::set_delete_data_on_uninstall(
+			isset( $_POST['delete_data_on_uninstall'] )
+			&& 'yes' === sanitize_text_field( wp_unslash( $_POST['delete_data_on_uninstall'] ) )
+		);
+
 		$results = Art_Starter_Initial_Setup::apply( wp_unslash( $_POST ) );
 
 		set_transient(
@@ -56,11 +59,9 @@ class Art_Starter_Admin_Initial_Setup {
 
 		wp_safe_redirect(
 			add_query_arg(
-				array(
-					'page'    => self::PAGE_SLUG,
-					'applied' => '1',
-				),
-				admin_url( 'admin.php' )
+				'applied',
+				'1',
+				Art_Starter_Admin_Settings::get_tab_url( Art_Starter_Admin_Settings::TAB_SETUP )
 			)
 		);
 		exit;

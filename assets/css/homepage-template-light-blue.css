@@ -158,6 +158,23 @@
 	color: #3b82f6;
 }
 
+.art-starter-homepage--light-blue .art-starter-homepage-social__item--labeled .art-starter-homepage-social__icon-wrap {
+	border-color: #dbeafe;
+	background: #ffffff;
+	color: #3b82f6;
+	box-shadow: 0 4px 14px rgba(59, 130, 246, 0.1);
+}
+
+.art-starter-homepage--light-blue .art-starter-homepage-social__item.art-starter-homepage-social__item--labeled {
+	border: none;
+	background: transparent;
+	box-shadow: none;
+}
+
+.art-starter-homepage--light-blue .art-starter-homepage-social__label {
+	color: #3b82f6;
+}
+
 .art-starter-homepage-preview__frame.art-starter-homepage-preview__frame--light-blue {
 	background: linear-gradient(180deg, #f0f9ff 0%, #f8fbff 52%, #ffffff 100%);
 	border-color: #bfdbfe;

@@ -158,6 +158,7 @@ $cta_icon   = isset( $cta['icon'] ) ? (string) $cta['icon'] : '';
 		<?php endif; ?>
 
 		<?php if ( Art_Starter_Homepage::is_block_visible( $settings, 'socials' ) && ! empty( $socials ) ) : ?>
+			<?php $show_social_labels = Art_Starter_Homepage::should_show_social_labels( $settings ); ?>
 			<div class="art-starter-homepage-social">
 				<?php foreach ( $socials as $item ) : ?>
 					<?php
@@ -172,14 +173,30 @@ $cta_icon   = isset( $cta['icon'] ) ? (string) $cta['icon'] : '';
 						continue;
 					}
 
-					$icon_meta = Art_Starter_Icons::get( $network );
-					$fallback  = $icon_meta ? (string) $icon_meta['label'] : $network;
+					$icon_meta    = Art_Starter_Icons::get( $network );
+					$fallback     = $icon_meta ? (string) $icon_meta['label'] : $network;
+					$network_label = Art_Starter_Homepage::get_social_network_label( $network );
+					$item_class   = 'art-starter-homepage-social__item';
+
+					if ( $show_social_labels && '' !== $network_label ) {
+						$item_class .= ' art-starter-homepage-social__item--labeled';
+					}
 					?>
-					<a class="art-starter-homepage-social__item" href="<?php echo esc_url( $href ); ?>" target="_blank" rel="noopener noreferrer">
-						<?php
-						// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- icon markup from internal registry helper.
-						echo Art_Starter_Icons::render_or_letter( $network, $fallback, 'art-starter-homepage-social__icon-svg' );
-						?>
+					<a class="<?php echo esc_attr( $item_class ); ?>" href="<?php echo esc_url( $href ); ?>" target="_blank" rel="noopener noreferrer">
+						<?php if ( $show_social_labels && '' !== $network_label ) : ?>
+							<span class="art-starter-homepage-social__icon-wrap">
+								<?php
+								// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- icon markup from internal registry helper.
+								echo Art_Starter_Icons::render_or_letter( $network, $fallback, 'art-starter-homepage-social__icon-svg' );
+								?>
+							</span>
+							<span class="art-starter-homepage-social__label"><?php echo esc_html( $network_label ); ?></span>
+						<?php else : ?>
+							<?php
+							// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- icon markup from internal registry helper.
+							echo Art_Starter_Icons::render_or_letter( $network, $fallback, 'art-starter-homepage-social__icon-svg' );
+							?>
+						<?php endif; ?>
 					</a>
 				<?php endforeach; ?>
 			</div>

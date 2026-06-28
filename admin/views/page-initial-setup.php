@@ -13,9 +13,7 @@ $technical = $form_state['technical'];
 $removable = $form_state['removable'];
 
 ?>
-<div class="wrap art-starter-admin">
-	<h1><?php esc_html_e( 'Настройки', 'art-starter' ); ?></h1>
-
+<div class="art-starter-admin-tab-setup">
 	<p class="description">
 		<?php esc_html_e( 'Базовые настройки для нового сайта. Технические опции меняют только значения по умолчанию WordPress. Удаление затрагивает лишь распознанный демо-контент — перед применением проверьте список ниже.', 'art-starter' ); ?>
 	</p>
@@ -319,6 +317,31 @@ $removable = $form_state['removable'];
 					<?php endif; ?>
 				</div>
 			</div>
+		</div>
+
+		<div class="art-starter-panel">
+			<h2><?php esc_html_e( 'Данные при удалении', 'art-starter' ); ?></h2>
+
+			<table class="form-table" role="presentation">
+				<tr>
+					<th scope="row"><?php esc_html_e( 'Удаление плагина', 'art-starter' ); ?></th>
+					<td>
+						<label for="art-starter-delete-data-on-uninstall">
+							<input
+								type="checkbox"
+								id="art-starter-delete-data-on-uninstall"
+								name="delete_data_on_uninstall"
+								value="yes"
+								<?php checked( Art_Starter_Settings::should_delete_data_on_uninstall() ); ?>
+							>
+							<?php esc_html_e( 'Удалять все данные плагина при удалении плагина', 'art-starter' ); ?>
+						</label>
+						<p class="description">
+							<?php esc_html_e( 'Если включено, при удалении ART Starter через экран «Плагины» будут безвозвратно удалены настройки главной страницы, страницы 404, служебные transients и данные проверки обновлений. Страницы WordPress, записи и настройки сайта, изменённые через ART Starter, не удаляются.', 'art-starter' ); ?>
+						</p>
+					</td>
+				</tr>
+			</table>
 		</div>
 
 		<?php submit_button( __( 'Применить настройки', 'art-starter' ) ); ?>

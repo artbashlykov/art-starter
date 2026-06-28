@@ -12,8 +12,6 @@ defined( 'ABSPATH' ) || exit;
  */
 class Art_Starter_Admin_Homepage {
 
-	const PAGE_SLUG = 'art-starter-homepage';
-
 	const SETTINGS_GROUP = 'art_starter_homepage_group';
 
 	/**

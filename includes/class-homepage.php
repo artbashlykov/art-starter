@@ -229,7 +229,10 @@ class Art_Starter_Homepage {
 				'cta'       => array( 'hidden' => false ),
 				'links'     => array( 'hidden' => false ),
 				'recommend' => array( 'hidden' => false ),
-				'socials'   => array( 'hidden' => false ),
+				'socials'   => array(
+					'hidden'      => false,
+					'show_labels' => false,
+				),
 			),
 			'profile'           => array(
 				'avatar_url' => '',
@@ -266,32 +269,23 @@ class Art_Starter_Homepage {
 
 		$settings = array_replace_recursive( self::get_defaults(), $stored );
 
-		return self::normalize_settings( $settings, $stored );
+		return self::normalize_settings( $settings );
 	}
 
 	/**
-	 * Normalize stored settings (legacy social migration, etc.).
+	 * Normalize stored settings.
 	 *
-	 * @param array<string, mixed> $settings   Merged settings array.
-	 * @param array<string, mixed> $raw_stored Raw option value from the database.
+	 * @param array<string, mixed> $settings Merged settings array.
 	 * @return array<string, mixed>
 	 */
-	private static function normalize_settings( $settings, $raw_stored = array() ) {
+	private static function normalize_settings( $settings ) {
 		if ( ! is_array( $settings ) ) {
 			return self::get_defaults();
 		}
 
-		if ( ! is_array( $raw_stored ) ) {
-			$raw_stored = array();
-		}
-
-		if ( ! array_key_exists( 'socials', $raw_stored ) ) {
-			$settings['socials'] = self::migrate_legacy_socials( $settings );
-		} elseif ( ! is_array( $settings['socials'] ) ) {
+		if ( ! isset( $settings['socials'] ) || ! is_array( $settings['socials'] ) ) {
 			$settings['socials'] = array();
 		}
-
-		unset( $settings['social'], $settings['social_icons'] );
 
 		if ( isset( $settings['links'] ) && is_array( $settings['links'] ) ) {
 			$settings['links'] = self::normalize_links( $settings['links'] );
@@ -301,7 +295,7 @@ class Art_Starter_Homepage {
 	}
 
 	/**
-	 * Repair links split across rows by legacy links[][] form parsing.
+	 * Repair links split across rows by malformed saved data.
 	 *
 	 * @param array<int, mixed> $links Raw link rows.
 	 * @return array<int, array{label: string, url: string, icon: string}>
@@ -380,39 +374,33 @@ class Art_Starter_Homepage {
 	}
 
 	/**
-	 * Convert legacy fixed social fields to dynamic list.
+	 * Whether social network labels should be shown under icons on the front end.
 	 *
-	 * @param array<string, mixed> $settings Settings array.
-	 * @return array<int, array{network: string, label: string, url: string}>
+	 * @param array<string, mixed> $settings Homepage settings.
+	 * @return bool
 	 */
-	private static function migrate_legacy_socials( $settings ) {
-		$social = isset( $settings['social'] ) && is_array( $settings['social'] ) ? $settings['social'] : array();
-		$legacy = array(
-			'telegram'  => 'telegram',
-			'vk'        => 'vk',
-			'youtube'   => 'youtube',
-			'instagram' => 'instagram',
-			'email'     => 'mail',
-		);
-		$items  = array();
-
-		foreach ( $legacy as $key => $network ) {
-			$raw = isset( $social[ $key ] ) ? trim( (string) $social[ $key ] ) : '';
-			if ( '' === $raw ) {
-				continue;
-			}
-
-			$icon = Art_Starter_Icons::get( $network );
-			$url  = 'mail' === $network ? $raw : self::normalize_external_url( $raw );
-
-			$items[] = array(
-				'network' => $network,
-				'label'   => $icon ? (string) $icon['label'] : '',
-				'url'     => $url,
-			);
+	public static function should_show_social_labels( $settings ) {
+		if ( ! is_array( $settings ) ) {
+			return false;
 		}
 
-		return $items;
+		$blocks = isset( $settings['blocks']['socials'] ) && is_array( $settings['blocks']['socials'] )
+			? $settings['blocks']['socials']
+			: array();
+
+		return ! empty( $blocks['show_labels'] );
+	}
+
+	/**
+	 * Human-readable label for a social network slug.
+	 *
+	 * @param string $network Social network slug.
+	 * @return string
+	 */
+	public static function get_social_network_label( $network ) {
+		$icon = Art_Starter_Icons::get( $network );
+
+		return $icon ? (string) $icon['label'] : '';
 	}
 
 	/**
@@ -551,6 +539,10 @@ class Art_Starter_Homepage {
 		foreach ( self::get_block_keys() as $block_key ) {
 			$block = isset( $blocks_input[ $block_key ] ) && is_array( $blocks_input[ $block_key ] ) ? $blocks_input[ $block_key ] : array();
 			$out['blocks'][ $block_key ]['hidden'] = ! empty( $block['hidden'] );
+
+			if ( 'socials' === $block_key ) {
+				$out['blocks']['socials']['show_labels'] = ! empty( $block['show_labels'] );
+			}
 		}
 
 		$profile                      = isset( $input['profile'] ) && is_array( $input['profile'] ) ? $input['profile'] : array();

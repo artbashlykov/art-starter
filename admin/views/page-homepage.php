@@ -26,9 +26,7 @@ $use_as_front_page = ! empty( $settings['use_as_front_page'] );
 $reading_url       = admin_url( 'options-reading.php' );
 
 ?>
-<div class="wrap art-starter-admin">
-	<h1><?php esc_html_e( 'Главная страница', 'art-starter' ); ?></h1>
-
+<div class="art-starter-admin-tab-homepage">
 	<p class="description">
 		<?php esc_html_e( 'Выберите шаблон и заполните блоки. Справа — превью (уменьшено в 1,5 раза), которое обновляется при вводе.', 'art-starter' ); ?>
 	</p>
@@ -338,6 +336,23 @@ $reading_url       = admin_url( 'options-reading.php' );
 						);
 						?>
 					</p>
+
+					<?php
+					$socials_block = isset( $settings['blocks']['socials'] ) && is_array( $settings['blocks']['socials'] )
+						? $settings['blocks']['socials']
+						: array();
+					$show_social_labels = ! empty( $socials_block['show_labels'] );
+					?>
+					<label class="art-starter-social-labels-toggle">
+						<input
+							type="checkbox"
+							name="<?php echo esc_attr( $option_name ); ?>[blocks][socials][show_labels]"
+							value="1"
+							<?php checked( $show_social_labels ); ?>
+							data-art-starter-social-labels-toggle
+						>
+						<?php esc_html_e( 'Отображать подписи соцсетей на сайте', 'art-starter' ); ?>
+					</label>
 
 					<div class="art-starter-socials-list" id="art-starter-homepage-socials">
 						<?php

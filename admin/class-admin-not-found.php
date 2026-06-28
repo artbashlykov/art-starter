@@ -12,8 +12,6 @@ defined( 'ABSPATH' ) || exit;
  */
 class Art_Starter_Admin_Not_Found {
 
-	const PAGE_SLUG = 'art-starter-not-found';
-
 	const SETTINGS_GROUP = 'art_starter_not_found_group';
 
 	/**

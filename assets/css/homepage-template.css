@@ -333,3 +333,44 @@
 	font-size: 13px;
 	font-weight: 800;
 }
+
+.art-starter-homepage-social__item.art-starter-homepage-social__item--labeled {
+	width: auto;
+	height: auto;
+	min-width: 0;
+	padding: 0;
+	background: transparent;
+	border: none;
+	box-shadow: none;
+	flex-direction: column;
+	align-items: center;
+	justify-content: flex-start;
+	gap: 10px;
+	font-weight: 400;
+	font-size: inherit;
+	color: inherit;
+	text-decoration: none;
+}
+
+.art-starter-homepage-social__icon-wrap {
+	width: var(--art-starter-tpl-social-circle);
+	height: var(--art-starter-tpl-social-circle);
+	border-radius: 999px;
+	background: #ffffff;
+	border: 1px solid #e5e7eb;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	flex-shrink: 0;
+	overflow: hidden;
+}
+
+.art-starter-homepage-social__label {
+	display: block;
+	font-size: 12px;
+	font-weight: 400;
+	line-height: 1.2;
+	text-align: center;
+	max-width: 96px;
+	color: #111827;
+}

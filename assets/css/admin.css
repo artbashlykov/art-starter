@@ -1,3 +1,13 @@
+.art-starter-admin .art-starter-admin-tabs {
+	margin-bottom: 10px;
+}
+
+.art-starter-admin .art-starter-admin-tabs + .art-starter-admin-tab-panel > .description,
+.art-starter-admin-tab-panel > .description {
+	margin-top: 12px;
+	margin-bottom: 16px;
+}
+
 .art-starter-admin .art-starter-panel {
 	margin-bottom: 20px;
 	padding: 16px 20px;
@@ -46,15 +56,6 @@
 
 .art-starter-panel__hide input {
 	margin: 0;
-}
-
-.art-starter-admin .art-starter-list {
-	margin: 0;
-	padding-left: 1.2em;
-}
-
-.art-starter-admin .art-starter-list li + li {
-	margin-top: 0.35em;
 }
 
 .art-starter-checkbox-list {
@@ -246,6 +247,11 @@
 	gap: 12px;
 	width: 100%;
 	max-width: none;
+}
+
+.art-starter-social-labels-toggle {
+	display: block;
+	margin: 20px 0;
 }
 
 .art-starter-social-item-row {

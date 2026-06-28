@@ -347,13 +347,21 @@
 		return el ? el.checked : false;
 	}
 
+	function isSocialLabelsEnabled() {
+		var el = form.querySelector('[data-art-starter-social-labels-toggle]');
+		return !!(el && el.checked);
+	}
+
 	function readBlocksState() {
 		return {
 			profile: { hidden: isBlockHidden('profile') },
 			cta: { hidden: isBlockHidden('cta') },
 			links: { hidden: isBlockHidden('links') },
 			recommend: { hidden: isBlockHidden('recommend') },
-			socials: { hidden: isBlockHidden('socials') }
+			socials: {
+				hidden: isBlockHidden('socials'),
+				show_labels: isSocialLabelsEnabled()
+			}
 		};
 	}
 
@@ -498,7 +506,7 @@
 		root.style.display = visible ? '' : 'none';
 	}
 
-	function renderSocial(socials) {
+	function renderSocial(socials, showLabels) {
 		var root = previewRoot.querySelector('[data-bind="social"]');
 		if (!root) {
 			return;
@@ -519,8 +527,25 @@
 			visible += 1;
 
 			var node = document.createElement('div');
-			node.className = 'art-starter-homepage-social__item';
-			node.innerHTML = renderIconOrLetter(network, label, 'art-starter-homepage-social__icon-svg');
+
+			if (showLabels && label) {
+				node.className = 'art-starter-homepage-social__item art-starter-homepage-social__item--labeled';
+
+				var iconWrap = document.createElement('span');
+				iconWrap.className = 'art-starter-homepage-social__icon-wrap';
+				iconWrap.innerHTML = renderIconOrLetter(network, label, 'art-starter-homepage-social__icon-svg');
+
+				var labelEl = document.createElement('span');
+				labelEl.className = 'art-starter-homepage-social__label';
+				labelEl.textContent = label;
+
+				node.appendChild(iconWrap);
+				node.appendChild(labelEl);
+			} else {
+				node.className = 'art-starter-homepage-social__item';
+				node.innerHTML = renderIconOrLetter(network, label, 'art-starter-homepage-social__icon-svg');
+			}
+
 			root.appendChild(node);
 		});
 
@@ -543,7 +568,10 @@
 
 		renderAvatar(safeText(state.profile.avatar_url), safeText(state.profile.name));
 		renderLinks(state.links);
-		renderSocial(state.socials);
+		renderSocial(
+			state.socials,
+			state.blocks && state.blocks.socials && state.blocks.socials.show_labels
+		);
 
 		setText('[data-bind="recommend-badge"]', safeText(state.recommend.badge) || 'Рекомендуем');
 		setText('.art-starter-homepage-recommend__title', safeText(state.recommend.title));
@@ -925,6 +953,11 @@
 		}
 
 		if (target.hasAttribute('data-art-starter-block-visibility')) {
+			triggerPreviewUpdate();
+			return;
+		}
+
+		if (target.hasAttribute('data-art-starter-social-labels-toggle')) {
 			triggerPreviewUpdate();
 			return;
 		}

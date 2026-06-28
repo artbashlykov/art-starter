@@ -26,9 +26,7 @@ $code                 = isset( $settings['code'] ) ? (string) $settings['code'] 
 $title                = isset( $settings['title'] ) ? (string) $settings['title'] : '';
 
 ?>
-<div class="wrap art-starter-admin">
-	<h1><?php esc_html_e( 'Страница 404', 'art-starter' ); ?></h1>
-
+<div class="art-starter-admin-tab-not-found">
 	<p class="description">
 		<?php esc_html_e( 'Выберите цветовую схему и заполните содержимое. Справа — превью (уменьшено в 1,5 раза), которое обновляется при вводе.', 'art-starter' ); ?>
 	</p>

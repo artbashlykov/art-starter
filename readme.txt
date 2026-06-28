@@ -4,7 +4,7 @@ Tags: starter, onboarding, landing page, link in bio, 404
 Requires at least: 6.0
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 1.0.6
+Stable tag: 1.0.7
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -27,7 +27,7 @@ Main features:
 
 1. Upload the `art-starter` folder to `/wp-content/plugins/` or install the plugin through the WordPress admin.
 2. Activate the plugin on the Plugins screen.
-3. Open **ART Starter** in the admin and configure the homepage or 404 page.
+3. Open **Settings → ART Starter** in the admin and configure the homepage or 404 page.
 
 == Frequently Asked Questions ==
 
@@ -40,6 +40,13 @@ ART Starter is for people who want a fast launch: technical WordPress settings, 
 The homepage and custom 404 page use self-contained layouts. When enabled, ART Starter removes active theme styles on those pages so the design stays consistent.
 
 == Changelog ==
+
+= 1.0.7 =
+* Tabbed admin UI: setup, homepage, and 404 on one screen.
+* Move ART Starter to **Settings** in the WordPress admin.
+* Optional social network labels under homepage icons (12px).
+* Optional full data cleanup on plugin uninstall.
+* Remove the old dashboard and unused legacy admin code.
 
 = 1.0.6 =
 * Align GitHub update checker with ART PUC standards (User-Agent, release zip asset filter).

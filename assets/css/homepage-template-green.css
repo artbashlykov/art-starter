@@ -167,6 +167,23 @@
 	color: #5d8a58;
 }
 
+.art-starter-homepage--green .art-starter-homepage-social__item--labeled .art-starter-homepage-social__icon-wrap {
+	border-color: #d4e6d2;
+	background: #ffffff;
+	color: #5d8a58;
+	box-shadow: 0 4px 14px rgba(74, 124, 68, 0.08);
+}
+
+.art-starter-homepage--green .art-starter-homepage-social__item.art-starter-homepage-social__item--labeled {
+	border: none;
+	background: transparent;
+	box-shadow: none;
+}
+
+.art-starter-homepage--green .art-starter-homepage-social__label {
+	color: #5d8a58;
+}
+
 .art-starter-homepage-preview__frame.art-starter-homepage-preview__frame--green {
 	background-color: #f9fbf9;
 	background-image: linear-gradient(180deg, #f4f8f4 0%, #f9fbf9 38%, #f9fbf9 100%);
