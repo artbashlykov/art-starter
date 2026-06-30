@@ -31,8 +31,6 @@ $title                = isset( $settings['title'] ) ? (string) $settings['title'
 		<?php esc_html_e( 'Выберите цветовую схему и заполните содержимое. Справа — превью (уменьшено в 1,5 раза), которое обновляется при вводе.', 'art-starter' ); ?>
 	</p>
 
-	<?php Art_Starter_Admin_Not_Found::render_settings_saved_notice(); ?>
-
 	<div class="art-starter-homepage-layout">
 		<div class="art-starter-homepage-settings">
 			<form method="post" action="options.php" class="art-starter-not-found-form" id="art-starter-not-found-form">

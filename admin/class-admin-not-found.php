@@ -48,20 +48,6 @@ class Art_Starter_Admin_Not_Found {
 	}
 
 	/**
-	 * Show success notice after options.php saves settings.
-	 */
-	public static function render_settings_saved_notice() {
-		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- options.php redirect flag only.
-		if ( empty( $_GET['settings-updated'] ) ) {
-			return;
-		}
-
-		echo '<div class="notice notice-success is-dismissible"><p>';
-		esc_html_e( 'Настройки сохранены.', 'art-starter' );
-		echo '</p></div>';
-	}
-
-	/**
 	 * Render primary 404 button row.
 	 *
 	 * @param array<string, string> $item Button item.

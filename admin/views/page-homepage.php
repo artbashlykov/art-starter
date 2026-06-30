@@ -31,8 +31,6 @@ $reading_url       = admin_url( 'options-reading.php' );
 		<?php esc_html_e( 'Выберите шаблон и заполните блоки. Справа — превью (уменьшено в 1,5 раза), которое обновляется при вводе.', 'art-starter' ); ?>
 	</p>
 
-	<?php Art_Starter_Admin_Homepage::render_settings_saved_notice(); ?>
-
 	<div class="art-starter-homepage-layout">
 		<div class="art-starter-homepage-settings">
 			<form method="post" action="options.php" class="art-starter-homepage-form" id="art-starter-homepage-form">
