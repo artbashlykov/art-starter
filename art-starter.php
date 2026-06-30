@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       ART Starter
  * Description:       Плагин, который позволяет быстро настроить техническую часть сайта, настроить главную страницу (в формате удобной визитки на 7 шаблонов) и настроить страницу 404.
- * Version:           1.0.8
+ * Version:           1.0.9
  * Requires at least: 6.0
  * Requires PHP:      7.4
  * Author:            Арт Башлыков
@@ -16,7 +16,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'ART_STARTER_VERSION', '1.0.8' );
+define( 'ART_STARTER_VERSION', '1.0.9' );
 define( 'ART_STARTER_ADMIN_MENU_SLUG', 'art-starter' );
 define( 'ART_STARTER_AUTHOR_URL', 'https://forge.artbashlykov.ru' );
 define( 'ART_STARTER_PLUGIN_FILE', __FILE__ );

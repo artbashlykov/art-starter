@@ -37,6 +37,7 @@ class Art_Starter_Initial_Setup {
 		return array(
 			'hello-world',
 			'privet-mir',
+			'привет-мир',
 		);
 	}
 
@@ -74,8 +75,51 @@ class Art_Starter_Initial_Setup {
 		$text = wp_strip_all_tags( (string) $text );
 		$text = html_entity_decode( $text, ENT_QUOTES, 'UTF-8' );
 		$text = preg_replace( '/\s+/u', ' ', $text );
+		$text = str_replace( array( 'ё', 'Ё' ), array( 'е', 'Е' ), $text );
+
+		if ( function_exists( 'mb_strtolower' ) ) {
+			$text = mb_strtolower( $text, 'UTF-8' );
+		} else {
+			$text = strtolower( $text );
+		}
 
 		return trim( (string) $text );
+	}
+
+	/**
+	 * @param string $title Post title.
+	 * @return bool
+	 */
+	private static function is_known_hello_title( $title ) {
+		$normalized = self::normalize_text( $title );
+
+		foreach ( self::get_hello_post_titles() as $known_title ) {
+			if ( $normalized === self::normalize_text( $known_title ) ) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * @param string $slug Post slug.
+	 * @return bool
+	 */
+	private static function is_known_hello_slug( $slug ) {
+		$slug = sanitize_title( (string) $slug );
+
+		if ( '' === $slug ) {
+			return false;
+		}
+
+		foreach ( self::get_hello_post_slugs() as $known_slug ) {
+			if ( $slug === sanitize_title( $known_slug ) ) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	/**
@@ -89,19 +133,19 @@ class Art_Starter_Initial_Setup {
 			return false;
 		}
 
-		$defaults = array(
-			'Welcome to WordPress. This is your first post. Edit or delete it, then start writing!',
-			'Добро пожаловать в WordPress. Это ваша первая запись. Отредактируйте или удалите её, затем начинайте писать!',
-			'Добро пожаловать в WordPress. Это ваша первая запись. Отредактируйте или удалите ее, затем начинайте писать!',
+		$prefixes = array(
+			'welcome to wordpress. this is your first post.',
+			'добро пожаловать в wordpress. это ваша первая запись.',
+			'добро пожаловать на ',
 		);
 
-		foreach ( $defaults as $default ) {
-			if ( $normalized === self::normalize_text( $default ) ) {
+		foreach ( $prefixes as $prefix ) {
+			if ( 0 === strpos( $normalized, $prefix ) ) {
 				return true;
 			}
 		}
 
-		return false;
+		return (bool) preg_match( '/^welcome to .+\. this is your first post\./u', $normalized );
 	}
 
 	/**
@@ -142,11 +186,11 @@ class Art_Starter_Initial_Setup {
 			return false;
 		}
 
-		if ( ! in_array( $post->post_title, self::get_hello_post_titles(), true ) ) {
+		if ( ! self::is_known_hello_title( $post->post_title ) ) {
 			return false;
 		}
 
-		if ( ! in_array( $post->post_name, self::get_hello_post_slugs(), true ) ) {
+		if ( ! self::is_known_hello_slug( $post->post_name ) && 1 !== (int) $post->ID ) {
 			return false;
 		}
 
@@ -217,15 +261,23 @@ class Art_Starter_Initial_Setup {
 			return false;
 		}
 
-		$author = strtolower( (string) $theme->get( 'Author' ) );
+		$slug = (string) $theme->get_stylesheet();
 
-		if ( false === strpos( $author, 'wordpress' ) ) {
+		if ( 0 !== strpos( $slug, 'twenty' ) ) {
 			return false;
 		}
 
-		$slug = $theme->get_stylesheet();
+		$author = strtolower( self::normalize_text( (string) $theme->get( 'Author' ) ) );
 
-		return 0 === strpos( $slug, 'twenty' );
+		if ( false !== strpos( $author, 'wordpress' ) ) {
+			return true;
+		}
+
+		$author_uri = strtolower( (string) $theme->get( 'AuthorURI' ) );
+		$theme_uri  = strtolower( (string) $theme->get( 'ThemeURI' ) );
+
+		return false !== strpos( $author_uri, 'wordpress.org' )
+			|| false !== strpos( $theme_uri, 'wordpress.org/themes/' );
 	}
 
 	/**
@@ -248,6 +300,28 @@ class Art_Starter_Initial_Setup {
 
 		if ( $default_post instanceof WP_Post && 'post' === $default_post->post_type ) {
 			$candidate_ids[ $default_post->ID ] = $default_post->ID;
+		}
+
+		$posts_by_title = get_posts(
+			array(
+				'post_type'              => 'post',
+				'post_status'            => array( 'publish', 'draft', 'private' ),
+				'posts_per_page'         => 10,
+				'orderby'                => 'ID',
+				'order'                  => 'ASC',
+				'ignore_sticky_posts'    => true,
+				'update_post_meta_cache' => false,
+				'update_post_term_cache' => false,
+				'fields'                 => 'ids',
+			)
+		);
+
+		foreach ( $posts_by_title as $post_id ) {
+			$post = get_post( $post_id );
+
+			if ( $post instanceof WP_Post && self::is_known_hello_title( $post->post_title ) ) {
+				$candidate_ids[ $post->ID ] = $post->ID;
+			}
 		}
 
 		foreach ( array_unique( $candidate_ids ) as $post_id ) {
@@ -347,11 +421,12 @@ class Art_Starter_Initial_Setup {
 	}
 
 	/**
-	 * @param string               $plugin_file Plugin basename.
-	 * @param array<string, mixed> $plugin_data Plugin header data.
+	 * @param string               $plugin_file    Plugin basename.
+	 * @param array<string, mixed> $plugin_data    Plugin header data.
+	 * @param bool                 $include_active Whether active plugins may be listed.
 	 * @return bool
 	 */
-	private static function is_removable_default_plugin( $plugin_file, $plugin_data ) {
+	private static function is_removable_default_plugin( $plugin_file, $plugin_data, $include_active = true ) {
 		if ( ! in_array( $plugin_file, self::get_default_removable_plugin_files(), true ) ) {
 			return false;
 		}
@@ -360,29 +435,20 @@ class Art_Starter_Initial_Setup {
 			return false;
 		}
 
-		if ( is_plugin_active( $plugin_file ) ) {
+		if ( ! $include_active && is_plugin_active( $plugin_file ) ) {
 			return false;
 		}
 
-		$name = isset( $plugin_data['Name'] ) ? self::normalize_text( (string) $plugin_data['Name'] ) : '';
-
-		if ( 'akismet/akismet.php' === $plugin_file ) {
-			return false !== stripos( $name, 'akismet' );
-		}
-
-		if ( 'hello-dolly/hello.php' === $plugin_file ) {
-			return false !== stripos( $name, 'hello dolly' );
-		}
-
-		return false;
+		return true;
 	}
 
 	/**
-	 * Find inactive default WordPress plugins that are safe to remove.
+	 * Find bundled WordPress plugins that are safe to remove.
 	 *
+	 * @param bool $include_active Include active plugins (they will be deactivated before delete).
 	 * @return array<int, array<string, string>>
 	 */
-	public static function find_removable_plugins() {
+	public static function find_removable_plugins( $include_active = true ) {
 		if ( ! function_exists( 'get_plugins' ) ) {
 			require_once ABSPATH . 'wp-admin/includes/plugin.php';
 		}
@@ -390,7 +456,7 @@ class Art_Starter_Initial_Setup {
 		$items = array();
 
 		foreach ( get_plugins() as $plugin_file => $plugin_data ) {
-			if ( ! self::is_removable_default_plugin( $plugin_file, $plugin_data ) ) {
+			if ( ! self::is_removable_default_plugin( $plugin_file, $plugin_data, $include_active ) ) {
 				continue;
 			}
 
@@ -399,6 +465,7 @@ class Art_Starter_Initial_Setup {
 				'slug'    => dirname( $plugin_file ),
 				'name'    => (string) $plugin_data['Name'],
 				'version' => (string) $plugin_data['Version'],
+				'active'  => is_plugin_active( $plugin_file ) ? '1' : '0',
 			);
 		}
 
@@ -698,6 +765,33 @@ class Art_Starter_Initial_Setup {
 	}
 
 	/**
+	 * Prepare the WordPress filesystem API for theme/plugin deletion.
+	 *
+	 * @return bool
+	 */
+	private static function ensure_admin_filesystem() {
+		if ( ! function_exists( 'WP_Filesystem' ) ) {
+			require_once ABSPATH . 'wp-admin/includes/file.php';
+		}
+
+		global $wp_filesystem;
+
+		if ( is_object( $wp_filesystem ) ) {
+			return true;
+		}
+
+		ob_start();
+		$credentials = request_filesystem_credentials( '' );
+		ob_end_clean();
+
+		if ( ! WP_Filesystem( $credentials ) ) {
+			return false;
+		}
+
+		return is_object( $wp_filesystem );
+	}
+
+	/**
 	 * @return array<string, mixed>
 	 */
 	private static function delete_removable_themes() {
@@ -710,6 +804,11 @@ class Art_Starter_Initial_Setup {
 			'skipped' => array(),
 			'errors'  => array(),
 		);
+
+		if ( ! self::ensure_admin_filesystem() ) {
+			$results['errors'][] = __( 'Не удалось получить доступ к файловой системе для удаления тем.', 'art-starter' );
+			return $results;
+		}
 
 		$themes = self::find_removable_themes();
 
@@ -725,6 +824,12 @@ class Art_Starter_Initial_Setup {
 			if ( true === $result ) {
 				/* translators: %s: theme name */
 				$results['updated'][] = sprintf( __( 'Удалена тема «%s».', 'art-starter' ), $theme['name'] );
+				continue;
+			}
+
+			if ( null === $result ) {
+				/* translators: %s: theme name */
+				$results['errors'][] = sprintf( __( 'Не удалось удалить тему «%s»: нет доступа к файловой системе.', 'art-starter' ), $theme['name'] );
 				continue;
 			}
 
@@ -758,7 +863,12 @@ class Art_Starter_Initial_Setup {
 			'errors'  => array(),
 		);
 
-		$plugins = self::find_removable_plugins();
+		if ( ! self::ensure_admin_filesystem() ) {
+			$results['errors'][] = __( 'Не удалось получить доступ к файловой системе для удаления плагинов.', 'art-starter' );
+			return $results;
+		}
+
+		$plugins = self::find_removable_plugins( true );
 
 		if ( empty( $plugins ) ) {
 			$results['skipped'][] = __( 'Стартовые плагины WordPress не найдены.', 'art-starter' );
@@ -766,11 +876,21 @@ class Art_Starter_Initial_Setup {
 		}
 
 		foreach ( $plugins as $plugin ) {
+			if ( is_plugin_active( $plugin['file'] ) ) {
+				deactivate_plugins( $plugin['file'], true );
+			}
+
 			$result = delete_plugins( array( $plugin['file'] ) );
 
 			if ( true === $result ) {
 				/* translators: %s: plugin name */
 				$results['updated'][] = sprintf( __( 'Удалён плагин «%s».', 'art-starter' ), $plugin['name'] );
+				continue;
+			}
+
+			if ( null === $result ) {
+				/* translators: %s: plugin name */
+				$results['errors'][] = sprintf( __( 'Не удалось удалить плагин «%s»: нет доступа к файловой системе.', 'art-starter' ), $plugin['name'] );
 				continue;
 			}
 

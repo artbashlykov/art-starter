@@ -213,6 +213,10 @@ class Art_Starter_Admin_Initial_Setup {
 								esc_html( $plugin['slug'] ),
 								esc_html( $plugin['version'] )
 							);
+							if ( ! empty( $plugin['active'] ) ) {
+								echo ' — ';
+								esc_html_e( 'активен', 'art-starter' );
+							}
 							?>
 						</span>
 					</li>

@@ -307,12 +307,12 @@ $removable = $form_state['removable'];
 						<?php
 						Art_Starter_Admin_Initial_Setup::render_removable_plugins_preview(
 							$removable['plugins'],
-							__( 'Будут удалены неактивные стандартные плагины WordPress:', 'art-starter' )
+							__( 'Будут удалены стандартные плагины WordPress (активные — сначала деактивация):', 'art-starter' )
 						);
 						?>
 					<?php else : ?>
 						<p class="art-starter-removable-empty">
-							<?php esc_html_e( 'Akismet и Hello Dolly не найдены, активны или уже удалены — удалять нечего.', 'art-starter' ); ?>
+							<?php esc_html_e( 'Стартовые плагины WordPress (Akismet, Hello Dolly) не найдены или уже удалены.', 'art-starter' ); ?>
 						</p>
 					<?php endif; ?>
 				</div>
