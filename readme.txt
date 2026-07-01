@@ -4,7 +4,7 @@ Tags: starter, onboarding, landing page, link in bio, 404
 Requires at least: 6.0
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 1.1.0
+Stable tag: 1.1.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -40,6 +40,11 @@ ART Starter is for people who want a fast launch: technical WordPress settings, 
 The homepage and custom 404 page use self-contained layouts. When enabled, ART Starter removes active theme styles on those pages so the design stays consistent.
 
 == Changelog ==
+
+= 1.1.1 =
+* Homepage links: optional «Open in new tab» checkbox per link (enabled by default).
+* Homepage admin: compact link rows — icon opens picker on click, improved grid layout.
+* Remove unused admin CSS and simplify link-row JavaScript builders.
 
 = 1.1.0 =
 * Homepage mode uses WordPress Reading settings with service pages art-main and blog.

@@ -257,20 +257,19 @@
 		$reset.prop('disabled', isIconAtDefault(storedSlug, defaultSlug));
 	}
 
-	function buildIconFieldHTML(inputName, categories, defaultSlug) {
+	function buildLinkIconFieldHTML(inputName, categories, defaultSlug) {
 		defaultSlug = safeText(defaultSlug);
 		var previewHtml = defaultSlug && getIcon(defaultSlug)
 			? iconMarkup(defaultSlug, 'art-starter-icon-field__icon')
 			: '<span class="art-starter-icon-field__placeholder">' + (strings.noIconShort || 'Без') + '</span>';
 
 		return (
-			'<div class="art-starter-icon-field" data-art-starter-icon-field data-icon-categories="' + categories + '" data-icon-allow-none="1" data-icon-default="' + defaultSlug + '">' +
+			'<div class="art-starter-icon-field art-starter-icon-field--compact" data-art-starter-icon-field data-icon-categories="' + categories + '" data-icon-allow-none="1" data-icon-default="' + defaultSlug + '">' +
 				'<input type="hidden" class="art-starter-icon-field__input" name="' + inputName + '" value="' + defaultSlug + '">' +
 				'<div class="art-starter-icon-field__controls">' +
 					'<button type="button" class="art-starter-icon-field__preview-btn art-starter-icon-field__toggle" title="' + (strings.selectIcon || 'Выбрать иконку') + '">' +
 						'<span class="art-starter-icon-field__preview">' + previewHtml + '</span>' +
 					'</button>' +
-					'<button type="button" class="button art-starter-icon-field__toggle">' + (strings.selectIcon || 'Выбрать иконку') + '</button>' +
 					'<button type="button" class="button-link art-starter-icon-field__reset" disabled>' + (strings.resetIcon || 'Сбросить') + '</button>' +
 				'</div>' +
 			'</div>'
@@ -434,7 +433,11 @@
 			state.links.push({
 				label: labelEl ? safeText(labelEl.value) : '',
 				url: urlEl ? normalizeExternalUrl(urlEl.value) : '',
-				icon: iconEl ? safeText(iconEl.value) : ''
+				icon: iconEl ? safeText(iconEl.value) : '',
+				new_tab: (function () {
+					var newTabEl = row.querySelector('[data-art-starter-link-new-tab]');
+					return newTabEl ? newTabEl.checked : true;
+				})()
 			});
 		});
 
@@ -712,6 +715,7 @@
 			var iconInput = row.querySelector('.art-starter-icon-field__input');
 			var labelInput = row.querySelector('[data-art-starter-link-label]');
 			var urlInput = row.querySelector('[data-art-starter-link-url]');
+			var newTabInput = row.querySelector('[data-art-starter-link-new-tab]');
 
 			if (iconInput) {
 				iconInput.name = linkRowFieldName(index, 'icon');
@@ -721,6 +725,9 @@
 			}
 			if (urlInput) {
 				urlInput.name = linkRowFieldName(index, 'url');
+			}
+			if (newTabInput) {
+				newTabInput.name = linkRowFieldName(index, 'new_tab');
 			}
 		});
 	}
@@ -733,21 +740,25 @@
 		row.innerHTML =
 			buildSortButtonsHTML() +
 			'<div class="art-starter-link-row__icon">' +
-				buildIconFieldHTML(linkRowFieldName(index, 'icon'), iconPickerCategories, linkDefaultIcon) +
+				buildLinkIconFieldHTML(linkRowFieldName(index, 'icon'), iconPickerCategories, linkDefaultIcon) +
 			'</div>' +
-			'<div class="art-starter-link-row__fields">' +
-				'<p class="art-starter-link-row__field">' +
-					'<label class="screen-reader-text">' + (strings.linkText || 'Текст ссылки') + '</label>' +
-					'<input type="text" class="art-starter-field" name="' + linkRowFieldName(index, 'label') + '" placeholder="' + (strings.linkText || 'Текст ссылки') + '" data-art-starter-link-label autocomplete="off">' +
-				'</p>' +
-				'<p class="art-starter-link-row__field">' +
-					'<label class="screen-reader-text">' + (strings.linkUrl || 'URL') + '</label>' +
-					'<input type="text" class="art-starter-field" name="' + linkRowFieldName(index, 'url') + '" placeholder="' + (strings.linkUrlPlaceholder || 'example.com или https://...') + '" data-art-starter-link-url autocomplete="off">' +
-				'</p>' +
-			'</div>' +
+			'<p class="art-starter-link-row__field art-starter-link-row__field--label">' +
+				'<label class="screen-reader-text">' + (strings.linkText || 'Текст ссылки') + '</label>' +
+				'<input type="text" class="art-starter-field" name="' + linkRowFieldName(index, 'label') + '" placeholder="' + (strings.linkText || 'Текст ссылки') + '" data-art-starter-link-label autocomplete="off">' +
+			'</p>' +
+			'<p class="art-starter-link-row__field art-starter-link-row__field--url">' +
+				'<label class="screen-reader-text">' + (strings.linkUrl || 'URL') + '</label>' +
+				'<input type="text" class="art-starter-field" name="' + linkRowFieldName(index, 'url') + '" placeholder="' + (strings.linkUrlPlaceholder || 'example.com или https://...') + '" data-art-starter-link-url autocomplete="off">' +
+			'</p>' +
 			'<button type="button" class="button-link-delete art-starter-link-row__remove" aria-label="' + (strings.removeLinkAria || 'Удалить ссылку') + '">' +
 				(strings.removeLink || 'Удалить') +
-			'</button>';
+			'</button>' +
+			'<div class="art-starter-link-row__new-tab-row">' +
+				'<label class="art-starter-link-row__new-tab">' +
+					'<input type="checkbox" name="' + linkRowFieldName(index, 'new_tab') + '" value="1" checked data-art-starter-link-new-tab>' +
+					(strings.linkOpenNewTab || 'Открывать в новой вкладке') +
+				'</label>' +
+			'</div>';
 
 		return row;
 	}

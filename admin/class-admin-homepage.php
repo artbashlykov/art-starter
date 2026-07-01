@@ -234,6 +234,7 @@ class Art_Starter_Admin_Homepage {
 				'categories'   => Art_Starter_Icons::get_picker_categories(),
 				'allow_none'   => true,
 				'default_slug' => '',
+				'compact'      => false,
 			)
 		);
 
@@ -242,10 +243,15 @@ class Art_Starter_Admin_Homepage {
 		$icon         = $display_slug ? Art_Starter_Icons::get( $display_slug ) : null;
 		$input_id     = (string) $args['input_id'];
 		$categories   = implode( ',', array_map( 'sanitize_key', (array) $args['categories'] ) );
+		$field_class  = 'art-starter-icon-field';
+
+		if ( ! empty( $args['compact'] ) ) {
+			$field_class .= ' art-starter-icon-field--compact';
+		}
 
 		?>
 		<div
-			class="art-starter-icon-field"
+			class="<?php echo esc_attr( $field_class ); ?>"
 			data-art-starter-icon-field
 			data-icon-categories="<?php echo esc_attr( $categories ); ?>"
 			data-icon-allow-none="<?php echo ! empty( $args['allow_none'] ) ? '1' : '0'; ?>"
@@ -273,9 +279,11 @@ class Art_Starter_Admin_Homepage {
 						?>
 					</span>
 				</button>
-				<button type="button" class="button art-starter-icon-field__toggle">
-					<?php esc_html_e( 'Выбрать иконку', 'art-starter' ); ?>
-				</button>
+				<?php if ( empty( $args['compact'] ) ) : ?>
+					<button type="button" class="button art-starter-icon-field__toggle">
+						<?php esc_html_e( 'Выбрать иконку', 'art-starter' ); ?>
+					</button>
+				<?php endif; ?>
 				<button type="button" class="button-link art-starter-icon-field__reset" <?php disabled( $current_slug === (string) $args['default_slug'] || ( '' === $current_slug && '' !== (string) $args['default_slug'] ) ); ?>>
 					<?php esc_html_e( 'Сбросить', 'art-starter' ); ?>
 				</button>
@@ -307,6 +315,7 @@ class Art_Starter_Admin_Homepage {
 		$label       = isset( $item['label'] ) ? (string) $item['label'] : '';
 		$url         = isset( $item['url'] ) ? (string) $item['url'] : '';
 		$icon        = isset( $item['icon'] ) ? (string) $item['icon'] : '';
+		$new_tab     = ! array_key_exists( 'new_tab', $item ) || ! empty( $item['new_tab'] );
 		$row_index   = null === $index ? '' : '[' . (int) $index . ']';
 
 		?>
@@ -320,39 +329,50 @@ class Art_Starter_Admin_Homepage {
 					array(
 						'categories'   => Art_Starter_Icons::get_picker_categories(),
 						'default_slug' => Art_Starter_Icons::DEFAULT_LINK_ICON,
+						'compact'      => true,
 					)
 				);
 				?>
 			</div>
-			<div class="art-starter-link-row__fields">
-				<p class="art-starter-link-row__field">
-					<label class="screen-reader-text"><?php esc_html_e( 'Текст ссылки', 'art-starter' ); ?></label>
-					<input
-						type="text"
-						class="art-starter-field"
-						name="<?php echo esc_attr( $option_name ); ?>[links]<?php echo esc_attr( $row_index ); ?>[label]"
-						value="<?php echo esc_attr( $label ); ?>"
-						placeholder="<?php echo esc_attr__( 'Текст ссылки', 'art-starter' ); ?>"
-						data-art-starter-link-label
-						autocomplete="off"
-					>
-				</p>
-				<p class="art-starter-link-row__field">
-					<label class="screen-reader-text"><?php esc_html_e( 'URL', 'art-starter' ); ?></label>
-					<input
-						type="text"
-						class="art-starter-field"
-						name="<?php echo esc_attr( $option_name ); ?>[links]<?php echo esc_attr( $row_index ); ?>[url]"
-						value="<?php echo esc_attr( $url ); ?>"
-						placeholder="<?php echo esc_attr__( 'example.com или https://...', 'art-starter' ); ?>"
-						data-art-starter-link-url
-						autocomplete="off"
-					>
-				</p>
-			</div>
+			<p class="art-starter-link-row__field art-starter-link-row__field--label">
+				<label class="screen-reader-text"><?php esc_html_e( 'Текст ссылки', 'art-starter' ); ?></label>
+				<input
+					type="text"
+					class="art-starter-field"
+					name="<?php echo esc_attr( $option_name ); ?>[links]<?php echo esc_attr( $row_index ); ?>[label]"
+					value="<?php echo esc_attr( $label ); ?>"
+					placeholder="<?php echo esc_attr__( 'Текст ссылки', 'art-starter' ); ?>"
+					data-art-starter-link-label
+					autocomplete="off"
+				>
+			</p>
+			<p class="art-starter-link-row__field art-starter-link-row__field--url">
+				<label class="screen-reader-text"><?php esc_html_e( 'URL', 'art-starter' ); ?></label>
+				<input
+					type="text"
+					class="art-starter-field"
+					name="<?php echo esc_attr( $option_name ); ?>[links]<?php echo esc_attr( $row_index ); ?>[url]"
+					value="<?php echo esc_attr( $url ); ?>"
+					placeholder="<?php echo esc_attr__( 'example.com или https://...', 'art-starter' ); ?>"
+					data-art-starter-link-url
+					autocomplete="off"
+				>
+			</p>
 			<button type="button" class="button-link-delete art-starter-link-row__remove" aria-label="<?php echo esc_attr__( 'Удалить ссылку', 'art-starter' ); ?>">
 				<?php esc_html_e( 'Удалить', 'art-starter' ); ?>
 			</button>
+			<div class="art-starter-link-row__new-tab-row">
+				<label class="art-starter-link-row__new-tab">
+					<input
+						type="checkbox"
+						name="<?php echo esc_attr( $option_name ); ?>[links]<?php echo esc_attr( $row_index ); ?>[new_tab]"
+						value="1"
+						<?php checked( $new_tab ); ?>
+						data-art-starter-link-new-tab
+					>
+					<?php esc_html_e( 'Открывать в новой вкладке', 'art-starter' ); ?>
+				</label>
+			</div>
 		</div>
 		<?php
 	}

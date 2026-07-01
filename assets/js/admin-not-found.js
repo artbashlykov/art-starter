@@ -270,15 +270,12 @@
 	function updateIconFieldUI($field) {
 		var slug = safeText($field.find('.art-starter-icon-field__input').val());
 		var defaultSlug = safeText($field.data('icon-default'));
-		var allowNone = $field.data('icon-allow-none') === 1 || $field.data('icon-allow-none') === '1';
 		var effectiveSlug = getEffectiveIconSlug(slug, defaultSlug);
 		var icon = effectiveSlug ? getIcon(effectiveSlug) : null;
 		var $preview = $field.find('.art-starter-icon-field__preview');
 
 		if (icon) {
 			$preview.html(iconMarkup(effectiveSlug, 'art-starter-icon-field__icon'));
-		} else if (allowNone) {
-			$preview.html('<span class="art-starter-icon-field__placeholder">' + (strings.noIconShort || 'Без') + '</span>');
 		} else {
 			$preview.html('<span class="art-starter-icon-field__placeholder">' + (strings.noIconShort || 'Без') + '</span>');
 		}

@@ -312,6 +312,7 @@ class Art_Starter_Homepage {
 			$label = isset( $links[ $i ]['label'] ) ? (string) $links[ $i ]['label'] : '';
 			$url   = isset( $links[ $i ]['url'] ) ? (string) $links[ $i ]['url'] : '';
 			$icon  = isset( $links[ $i ]['icon'] ) ? (string) $links[ $i ]['icon'] : '';
+			$new_tab = array_key_exists( 'new_tab', $links[ $i ] ) ? ! empty( $links[ $i ]['new_tab'] ) : true;
 
 			if ( '' !== $label && '' === $url && ( $i + 1 ) < $count && is_array( $links[ $i + 1 ] ) ) {
 				$next_label = isset( $links[ $i + 1 ]['label'] ) ? (string) $links[ $i + 1 ]['label'] : '';
@@ -323,6 +324,9 @@ class Art_Starter_Homepage {
 					if ( '' === $icon && '' !== $next_icon ) {
 						$icon = $next_icon;
 					}
+					if ( array_key_exists( 'new_tab', $links[ $i + 1 ] ) ) {
+						$new_tab = ! empty( $links[ $i + 1 ]['new_tab'] );
+					}
 					++$i;
 				}
 			}
@@ -332,9 +336,10 @@ class Art_Starter_Homepage {
 			}
 
 			$normalized[] = array(
-				'label' => $label,
-				'url'   => $url,
-				'icon'  => Art_Starter_Icons::resolve_link_icon( $icon ),
+				'label'   => $label,
+				'url'     => $url,
+				'icon'    => Art_Starter_Icons::resolve_link_icon( $icon ),
+				'new_tab' => $new_tab,
 			);
 		}
 
@@ -558,10 +563,13 @@ class Art_Starter_Homepage {
 				continue;
 			}
 
+			$new_tab = ! empty( $link['new_tab'] );
+
 			$out['links'][] = array(
-				'label' => $label,
-				'url'   => $url,
-				'icon'  => $icon,
+				'label'   => $label,
+				'url'     => $url,
+				'icon'    => $icon,
+				'new_tab' => $new_tab,
 			);
 		}
 

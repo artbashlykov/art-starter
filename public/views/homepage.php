@@ -92,12 +92,13 @@ $cta_icon   = isset( $cta['icon'] ) ? (string) $cta['icon'] : '';
 					$link_label = isset( $link['label'] ) ? (string) $link['label'] : '';
 					$link_url   = isset( $link['url'] ) ? Art_Starter_Homepage::normalize_external_url( (string) $link['url'] ) : '';
 					$link_icon  = isset( $link['icon'] ) ? (string) $link['icon'] : '';
+					$link_new_tab = ! array_key_exists( 'new_tab', $link ) || ! empty( $link['new_tab'] );
 
 					if ( '' === $link_label && '' === $link_url ) {
 						continue;
 					}
 					?>
-					<a class="art-starter-homepage-link" href="<?php echo esc_url( $link_url ); ?>" target="_blank" rel="noopener noreferrer">
+					<a class="art-starter-homepage-link" href="<?php echo esc_url( $link_url ); ?>"<?php echo $link_new_tab ? ' target="_blank" rel="noopener noreferrer"' : ''; ?>>
 						<span class="art-starter-homepage-link__left">
 							<span class="art-starter-homepage-link__icon">
 								<?php

@@ -157,6 +157,7 @@ class Art_Starter_Admin_Menu {
 					'linkText'               => __( 'Текст ссылки', 'art-starter' ),
 					'linkUrl'                => __( 'URL', 'art-starter' ),
 					'linkUrlPlaceholder'     => __( 'example.com или https://...', 'art-starter' ),
+					'linkOpenNewTab'         => __( 'Открывать в новой вкладке', 'art-starter' ),
 					'removeLinkAria'         => __( 'Удалить ссылку', 'art-starter' ),
 					'addSocial'              => __( 'Добавить соцсеть', 'art-starter' ),
 					'removeSocial'           => __( 'Удалить', 'art-starter' ),
