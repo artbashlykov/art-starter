@@ -14,6 +14,10 @@ class Art_Starter_Initial_Setup {
 
 	const PERMALINK_STRUCTURE = '/%postname%/';
 
+	const UNCATEGORIZED_TARGET_NAME = 'Прочее';
+
+	const UNCATEGORIZED_TARGET_SLUG = 'prochee';
+
 	/**
 	 * Known default titles for the factory «Hello world!» post.
 	 *
@@ -511,6 +515,135 @@ class Art_Starter_Initial_Setup {
 	}
 
 	/**
+	 * Known default titles for the factory uncategorized category.
+	 *
+	 * @return array<int, string>
+	 */
+	private static function get_default_uncategorized_titles() {
+		return array(
+			'Uncategorized',
+			'Без рубрики',
+			'Без названия',
+			'Без название',
+		);
+	}
+
+	/**
+	 * Known default slugs for the factory uncategorized category.
+	 *
+	 * @return array<int, string>
+	 */
+	private static function get_default_uncategorized_slugs() {
+		return array(
+			'uncategorized',
+			'bez-rubriki',
+			'bez-nazvaniya',
+			'bez-nazvanie',
+		);
+	}
+
+	/**
+	 * @param string $title Category name.
+	 * @return bool
+	 */
+	private static function is_known_default_uncategorized_title( $title ) {
+		$normalized = self::normalize_text( $title );
+
+		foreach ( self::get_default_uncategorized_titles() as $known_title ) {
+			if ( $normalized === self::normalize_text( $known_title ) ) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * @param string $slug Category slug.
+	 * @return bool
+	 */
+	private static function is_known_default_uncategorized_slug( $slug ) {
+		$slug = sanitize_title( (string) $slug );
+
+		if ( '' === $slug ) {
+			return false;
+		}
+
+		foreach ( self::get_default_uncategorized_slugs() as $known_slug ) {
+			if ( $slug === sanitize_title( $known_slug ) ) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * @return WP_Term|null
+	 */
+	public static function get_default_category_term() {
+		$term_id = (int) get_option( 'default_category', 0 );
+
+		if ( $term_id > 0 ) {
+			$term = get_term( $term_id, 'category' );
+
+			if ( $term instanceof WP_Term && ! is_wp_error( $term ) ) {
+				return $term;
+			}
+		}
+
+		foreach ( self::get_default_uncategorized_slugs() as $slug ) {
+			$term = get_term_by( 'slug', $slug, 'category' );
+
+			if ( $term instanceof WP_Term ) {
+				return $term;
+			}
+		}
+
+		$term = get_term( 1, 'category' );
+
+		return ( $term instanceof WP_Term && ! is_wp_error( $term ) ) ? $term : null;
+	}
+
+	/**
+	 * Whether the default category already uses the target name.
+	 *
+	 * @return bool
+	 */
+	public static function is_uncategorized_renamed_to_prochee() {
+		$term = self::get_default_category_term();
+
+		if ( ! $term instanceof WP_Term ) {
+			return false;
+		}
+
+		return self::normalize_text( $term->name ) === self::normalize_text( self::UNCATEGORIZED_TARGET_NAME );
+	}
+
+	/**
+	 * Whether the factory default category can still be renamed safely.
+	 *
+	 * @param WP_Term|null $term Category term.
+	 * @return bool
+	 */
+	private static function is_renamable_default_uncategorized( $term ) {
+		if ( ! $term instanceof WP_Term ) {
+			return false;
+		}
+
+		if ( (int) get_option( 'default_category', 0 ) !== (int) $term->term_id ) {
+			return false;
+		}
+
+		if ( self::is_uncategorized_renamed_to_prochee() ) {
+			return false;
+		}
+
+		return self::is_known_default_uncategorized_title( $term->name )
+			|| self::is_known_default_uncategorized_slug( $term->slug );
+	}
+
+	/**
 	 * @return bool
 	 */
 	public static function is_permalink_postname_enabled() {
@@ -598,6 +731,8 @@ class Art_Starter_Initial_Setup {
 		$themes       = self::find_removable_themes();
 		$plugins      = self::find_removable_plugins();
 
+		$default_category = self::get_default_category_term();
+
 		return array(
 			'site_title'       => (string) get_option( 'blogname' ),
 			'site_tagline'     => (string) get_option( 'blogdescription' ),
@@ -621,6 +756,11 @@ class Art_Starter_Initial_Setup {
 				),
 				'disable_registration' => array(
 					'applied' => self::is_registration_disabled(),
+				),
+				'rename_uncategorized' => array(
+					'applied'      => self::is_uncategorized_renamed_to_prochee(),
+					'current_name' => $default_category instanceof WP_Term ? (string) $default_category->name : '',
+					'available'    => self::is_renamable_default_uncategorized( $default_category ),
 				),
 			),
 			'removable'        => array(
@@ -745,6 +885,46 @@ class Art_Starter_Initial_Setup {
 			} else {
 				update_option( 'users_can_register', 0 );
 				$results['updated'][] = __( 'Регистрация новых пользователей запрещена.', 'art-starter' );
+			}
+		}
+
+		if ( ! empty( $input['apply_rename_uncategorized'] ) ) {
+			if ( self::is_uncategorized_renamed_to_prochee() ) {
+				$results['skipped'][] = sprintf(
+					/* translators: %s: category name */
+					__( 'Рубрика по умолчанию уже называется «%s».', 'art-starter' ),
+					self::UNCATEGORIZED_TARGET_NAME
+				);
+			} else {
+				$default_category = self::get_default_category_term();
+
+				if ( ! self::is_renamable_default_uncategorized( $default_category ) ) {
+					$results['skipped'][] = __( 'Стандартная рубрика WordPress не найдена или уже изменена — переименование пропущено.', 'art-starter' );
+				} else {
+					$result = wp_update_term(
+						(int) $default_category->term_id,
+						'category',
+						array(
+							'name' => self::UNCATEGORIZED_TARGET_NAME,
+							'slug' => self::UNCATEGORIZED_TARGET_SLUG,
+						)
+					);
+
+					if ( is_wp_error( $result ) ) {
+						$results['errors'][] = sprintf(
+							/* translators: %s: error message */
+							__( 'Не удалось переименовать рубрику по умолчанию: %s', 'art-starter' ),
+							$result->get_error_message()
+						);
+					} else {
+						$results['updated'][] = sprintf(
+							/* translators: 1: old category name, 2: new category name */
+							__( 'Рубрика «%1$s» переименована в «%2$s».', 'art-starter' ),
+							$default_category->name,
+							self::UNCATEGORIZED_TARGET_NAME
+						);
+					}
+				}
 			}
 		}
 

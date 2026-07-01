@@ -52,7 +52,28 @@ class Art_Starter_Admin_Menu {
 			'art-starter-admin',
 			ART_STARTER_PLUGIN_URL . 'assets/css/admin.css',
 			array(),
-			ART_STARTER_VERSION
+			self::asset_version( 'assets/css/admin.css' )
+		);
+
+		wp_enqueue_script(
+			'art-starter-admin',
+			ART_STARTER_PLUGIN_URL . 'assets/js/admin.js',
+			array(),
+			self::asset_version( 'assets/js/admin.js' ),
+			true
+		);
+
+		wp_localize_script(
+			'art-starter-admin',
+			'artStarterAdmin',
+			array(
+				'strings' => array(
+					'copy'       => __( 'Скопировать', 'art-starter' ),
+					'copyLink'   => __( 'Скопировать ссылку', 'art-starter' ),
+					'copied'     => __( 'Скопировано', 'art-starter' ),
+					'copyFailed' => __( 'Не удалось скопировать.', 'art-starter' ),
+				),
+			)
 		);
 
 		$tab = Art_Starter_Admin_Settings::get_current_tab();
@@ -68,6 +89,22 @@ class Art_Starter_Admin_Menu {
 		if ( Art_Starter_Admin_Settings::TAB_NOT_FOUND === $tab ) {
 			self::enqueue_not_found_assets();
 		}
+	}
+
+	/**
+	 * Cache-busting version for a plugin asset file.
+	 *
+	 * @param string $relative_path Path relative to the plugin root.
+	 * @return string
+	 */
+	private static function asset_version( $relative_path ) {
+		$path = ART_STARTER_PLUGIN_DIR . ltrim( $relative_path, '/' );
+
+		if ( is_readable( $path ) ) {
+			return ART_STARTER_VERSION . '.' . (string) filemtime( $path );
+		}
+
+		return ART_STARTER_VERSION;
 	}
 
 	/**

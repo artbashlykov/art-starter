@@ -42,11 +42,52 @@ class Art_Starter_Admin_Homepage {
 			return;
 		}
 
-		Art_Starter_Homepage::sync_front_page_flag_with_reading();
-
 		$settings = Art_Starter_Homepage::get_all();
 
 		include ART_STARTER_PLUGIN_DIR . 'admin/views/page-homepage.php';
+	}
+
+	/**
+	 * Render a read-only URL field with copy button.
+	 *
+	 * @param string $label    Field label.
+	 * @param string $url      URL value.
+	 * @param string $input_id Input element ID.
+	 */
+	public static function render_copy_url_field( $label, $url, $input_id ) {
+		$url = (string) $url;
+
+		if ( '' === $url ) {
+			return;
+		}
+
+		$input_id = sanitize_html_class( (string) $input_id );
+
+		?>
+		<div class="art-starter-copy-url-field">
+			<label class="art-starter-copy-url-field__label" for="<?php echo esc_attr( $input_id ); ?>">
+				<?php echo esc_html( $label ); ?>
+			</label>
+			<div class="art-starter-copy-url-field__row">
+				<input
+					type="text"
+					class="art-starter-copy-url-field__input"
+					id="<?php echo esc_attr( $input_id ); ?>"
+					value="<?php echo esc_attr( $url ); ?>"
+					readonly
+				>
+				<button
+					type="button"
+					class="button art-starter-copy-url-field__copy"
+					data-copy-target="#<?php echo esc_attr( $input_id ); ?>"
+					aria-label="<?php esc_attr_e( 'Скопировать ссылку', 'art-starter' ); ?>"
+					title="<?php esc_attr_e( 'Скопировать', 'art-starter' ); ?>"
+				>
+					<span class="dashicons dashicons-clipboard" aria-hidden="true"></span>
+				</button>
+			</div>
+		</div>
+		<?php
 	}
 
 	/**

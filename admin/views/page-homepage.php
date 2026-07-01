@@ -22,8 +22,10 @@ if ( ! Art_Starter_Homepage::is_valid_template( $homepage_template ) ) {
 	$homepage_template = Art_Starter_Homepage::get_default_template();
 }
 
-$use_as_front_page = ! empty( $settings['use_as_front_page'] );
-$reading_url       = admin_url( 'options-reading.php' );
+$use_as_front_page     = ! empty( $settings['use_as_front_page'] );
+$reading_url           = admin_url( 'options-reading.php' );
+$reading_page_urls     = $use_as_front_page ? Art_Starter_Reading_Pages::get_public_page_urls() : array( 'main' => '', 'blog' => '' );
+$reading_warning       = $use_as_front_page ? Art_Starter_Reading_Pages::get_reading_warning_message() : '';
 
 ?>
 <div class="art-starter-admin-tab-homepage">
@@ -75,7 +77,7 @@ $reading_url       = admin_url( 'options-reading.php' );
 									printf(
 										wp_kses(
 											/* translators: %s: link to Settings → Reading screen. */
-											__( 'Можно назначить другую главную в %s. Если там выбрана статическая страница, этот чекбокс снимется автоматически.', 'art-starter' ),
+											__( 'Создаёт служебные страницы art-main и blog и настраивает %s: на главной показывается визитка ART Starter, записи — на /blog/. Если в «Чтении» выбраны другие страницы, этот чекбокс снимется автоматически.', 'art-starter' ),
 											array(
 												'a' => array(
 													'href' => array(),
@@ -86,6 +88,31 @@ $reading_url       = admin_url( 'options-reading.php' );
 									);
 									?>
 								</p>
+								<?php if ( $use_as_front_page && ( '' !== $reading_page_urls['main'] || '' !== $reading_page_urls['blog'] || '' !== $reading_warning ) ) : ?>
+									<div class="notice notice-info inline art-starter-reading-urls-notice" style="margin-top:10px;">
+										<?php if ( '' !== $reading_page_urls['main'] ) : ?>
+											<?php
+											Art_Starter_Admin_Homepage::render_copy_url_field(
+												__( 'Главная', 'art-starter' ),
+												$reading_page_urls['main'],
+												'art-starter-reading-url-main'
+											);
+											?>
+										<?php endif; ?>
+										<?php if ( '' !== $reading_page_urls['blog'] ) : ?>
+											<?php
+											Art_Starter_Admin_Homepage::render_copy_url_field(
+												__( 'Блог', 'art-starter' ),
+												$reading_page_urls['blog'],
+												'art-starter-reading-url-blog'
+											);
+											?>
+										<?php endif; ?>
+										<?php if ( '' !== $reading_warning ) : ?>
+											<p class="art-starter-reading-urls-notice__warning"><?php echo esc_html( $reading_warning ); ?></p>
+										<?php endif; ?>
+									</div>
+								<?php endif; ?>
 							</td>
 						</tr>
 					</table>

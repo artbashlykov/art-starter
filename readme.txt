@@ -4,7 +4,7 @@ Tags: starter, onboarding, landing page, link in bio, 404
 Requires at least: 6.0
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 1.0.10
+Stable tag: 1.1.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -40,6 +40,16 @@ ART Starter is for people who want a fast launch: technical WordPress settings, 
 The homepage and custom 404 page use self-contained layouts. When enabled, ART Starter removes active theme styles on those pages so the design stays consistent.
 
 == Changelog ==
+
+= 1.1.0 =
+* Homepage mode uses WordPress Reading settings with service pages art-main and blog.
+* Front page shows the ART Starter link-in-bio; posts archive is available at /blog/.
+* Service pages are locked in the admin with a managed-page notice.
+* Disabling the homepage option restores the previous Reading settings snapshot.
+* Homepage admin: copyable URL fields for main and blog, save button in the tab bar.
+* Technical setup: rename the default «Uncategorized» category to «Прочее».
+* Social network labels under icons are enabled by default on new installs.
+* Load initial-setup helpers only in the admin to reduce front-end bootstrap.
 
 = 1.0.10 =
 * Fix false success when Hello Dolly and other default plugins were not actually deleted.

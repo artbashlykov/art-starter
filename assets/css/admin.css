@@ -1,5 +1,24 @@
 .art-starter-admin .art-starter-admin-tabs {
+	margin-bottom: 0;
+}
+
+.art-starter-admin-tabs-bar {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 16px;
 	margin-bottom: 10px;
+}
+
+.art-starter-admin-tabs-bar .art-starter-admin-tabs {
+	flex: 1 1 auto;
+	min-width: 0;
+}
+
+.art-starter-admin-tabs-bar__save {
+	flex: 0 0 auto;
+	margin: 0 0 0 auto;
+	white-space: nowrap;
 }
 
 .art-starter-admin .art-starter-admin-tabs + .art-starter-admin-tab-panel > .description,
@@ -714,4 +733,75 @@ body.art-starter-icon-picker-open {
 	height: 64px;
 	object-fit: cover;
 	border-radius: 8px;
+}
+
+.art-starter-reading-urls-notice {
+	padding-top: 10px;
+	padding-bottom: 10px;
+}
+
+.art-starter-reading-urls-notice__warning {
+	margin: 10px 0 0;
+}
+
+.art-starter-copy-url-field + .art-starter-copy-url-field {
+	margin-top: 10px;
+}
+
+.art-starter-copy-url-field__label {
+	display: block;
+	margin: 0 0 6px;
+	font-weight: 600;
+}
+
+/* Override wp-admin .form-table input rules (width 100%, min-height 40px). */
+.art-starter-admin .form-table td .art-starter-reading-urls-notice .art-starter-copy-url-field__row {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	width: auto;
+	max-width: none;
+}
+
+.art-starter-admin .form-table td .art-starter-reading-urls-notice .art-starter-copy-url-field__input[type="text"] {
+	display: inline-block;
+	flex: 0 0 280px;
+	width: 280px;
+	max-width: 280px;
+	min-width: 0;
+	height: 32px;
+	min-height: 32px;
+	margin: 0;
+	padding: 0 8px;
+	line-height: 30px;
+}
+
+.art-starter-admin .form-table td .art-starter-reading-urls-notice .art-starter-copy-url-field__copy.button {
+	display: inline-flex;
+	flex: 0 0 32px;
+	align-items: center;
+	justify-content: center;
+	box-sizing: border-box;
+	width: 32px;
+	min-width: 32px;
+	height: 32px;
+	min-height: 32px;
+	margin: 0;
+	padding: 0;
+	line-height: 1;
+	vertical-align: middle;
+}
+
+.art-starter-admin .form-table td .art-starter-reading-urls-notice .art-starter-copy-url-field__copy .dashicons {
+	display: block;
+	width: 18px;
+	height: 18px;
+	margin: 0;
+	font-size: 18px;
+	line-height: 1;
+}
+
+.art-starter-copy-url-field__copy.is-copied {
+	border-color: #00a32a;
+	color: #00a32a;
 }

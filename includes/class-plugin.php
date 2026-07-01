@@ -49,7 +49,6 @@ class Art_Starter_Plugin {
 	 */
 	private function load_dependencies() {
 		require_once ART_STARTER_PLUGIN_DIR . 'includes/class-settings.php';
-		require_once ART_STARTER_PLUGIN_DIR . 'includes/class-initial-setup.php';
 		require_once ART_STARTER_PLUGIN_DIR . 'includes/class-icons.php';
 		require_once ART_STARTER_PLUGIN_DIR . 'includes/class-homepage.php';
 		require_once ART_STARTER_PLUGIN_DIR . 'includes/class-not-found.php';
@@ -57,6 +56,7 @@ class Art_Starter_Plugin {
 		require_once ART_STARTER_PLUGIN_DIR . 'public/class-public.php';
 
 		if ( is_admin() ) {
+			require_once ART_STARTER_PLUGIN_DIR . 'includes/class-initial-setup.php';
 			require_once ART_STARTER_PLUGIN_DIR . 'admin/class-admin-settings.php';
 			require_once ART_STARTER_PLUGIN_DIR . 'admin/class-admin-initial-setup.php';
 			require_once ART_STARTER_PLUGIN_DIR . 'admin/class-admin-homepage.php';

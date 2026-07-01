@@ -25,6 +25,9 @@ class Art_Starter_Uninstaller {
 			return;
 		}
 
+		require_once dirname( __DIR__ ) . '/includes/class-reading-pages.php';
+		Art_Starter_Reading_Pages::cleanup_on_uninstall();
+
 		self::clear_cron();
 		self::delete_plugin_options();
 		self::delete_transients();

@@ -105,11 +105,16 @@ class Art_Starter_Admin_Settings {
 	}
 
 	/**
-	 * Render tab navigation.
+	 * Render tab navigation and top save action.
 	 *
 	 * @param string $current_tab Active tab slug.
 	 */
 	public static function render_tabs( $current_tab ) {
+		$form_id    = self::get_active_form_id( $current_tab );
+		$save_label = self::get_save_button_label( $current_tab );
+
+		echo '<div class="art-starter-admin-tabs-bar">';
+
 		echo '<nav class="nav-tab-wrapper art-starter-admin-tabs" aria-label="' . esc_attr__( 'Вкладки', 'art-starter' ) . '">';
 
 		foreach ( self::get_tabs() as $tab_id => $label ) {
@@ -129,6 +134,45 @@ class Art_Starter_Admin_Settings {
 		}
 
 		echo '</nav>';
+
+		if ( '' !== $form_id ) {
+			printf(
+				'<button type="submit" form="%s" class="button button-primary art-starter-admin-tabs-bar__save">%s</button>',
+				esc_attr( $form_id ),
+				esc_html( $save_label )
+			);
+		}
+
+		echo '</div>';
+	}
+
+	/**
+	 * @param string $tab Tab slug.
+	 * @return string
+	 */
+	public static function get_active_form_id( $tab ) {
+		switch ( $tab ) {
+			case self::TAB_HOMEPAGE:
+				return 'art-starter-homepage-form';
+			case self::TAB_NOT_FOUND:
+				return 'art-starter-not-found-form';
+			case self::TAB_SETUP:
+				return 'art-starter-initial-setup-form';
+		}
+
+		return '';
+	}
+
+	/**
+	 * @param string $tab Tab slug.
+	 * @return string
+	 */
+	public static function get_save_button_label( $tab ) {
+		if ( self::TAB_SETUP === $tab ) {
+			return __( 'Применить настройки', 'art-starter' );
+		}
+
+		return __( 'Сохранить', 'art-starter' );
 	}
 
 	/**

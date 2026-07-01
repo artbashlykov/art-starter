@@ -174,13 +174,6 @@ class Art_Starter_Homepage {
 	}
 
 	/**
-	 * Skip auto-uncheck while plugin updates Reading options.
-	 *
-	 * @var bool
-	 */
-	private static $applying_reading_settings = false;
-
-	/**
 	 * Skip homepage activation while auto-unchecking the front page flag.
 	 *
 	 * @var bool
@@ -198,13 +191,16 @@ class Art_Starter_Homepage {
 	 * Register hooks.
 	 */
 	public static function init() {
+		require_once ART_STARTER_PLUGIN_DIR . 'includes/class-reading-pages.php';
+		Art_Starter_Reading_Pages::init();
+
 		add_action( 'update_option_' . self::OPTION, array( __CLASS__, 'on_option_updated' ), 10, 2 );
 		add_filter( 'pre_update_option_show_on_front', array( __CLASS__, 'on_reading_show_on_front_will_change' ), 10, 2 );
 		add_filter( 'pre_update_option_page_on_front', array( __CLASS__, 'on_reading_page_on_front_will_change' ), 10, 2 );
+		add_filter( 'pre_update_option_page_for_posts', array( __CLASS__, 'on_reading_page_for_posts_will_change' ), 10, 2 );
 		add_action( 'update_option_show_on_front', array( __CLASS__, 'on_reading_show_on_front_changed' ), 10, 2 );
 		add_action( 'update_option_page_on_front', array( __CLASS__, 'on_reading_page_on_front_changed' ), 10, 2 );
-		add_action( 'admin_init', array( __CLASS__, 'sync_front_page_flag_with_reading' ), 5 );
-		add_action( 'template_redirect', array( __CLASS__, 'sync_front_page_flag_with_reading' ), 0 );
+		add_action( 'update_option_page_for_posts', array( __CLASS__, 'on_reading_page_for_posts_changed' ), 10, 2 );
 		add_action( 'template_redirect', array( __CLASS__, 'maybe_render_front_page' ), 1 );
 	}
 
@@ -231,7 +227,7 @@ class Art_Starter_Homepage {
 				'recommend' => array( 'hidden' => false ),
 				'socials'   => array(
 					'hidden'      => false,
-					'show_labels' => false,
+					'show_labels' => true,
 				),
 			),
 			'profile'           => array(
@@ -437,34 +433,19 @@ class Art_Starter_Homepage {
 	 * Whether ART Starter homepage is assigned as the site front page.
 	 */
 	public static function is_active_as_front_page() {
-		if ( 'page' === get_option( 'show_on_front' ) ) {
-			return false;
-		}
-
 		$settings = self::get_all();
 
 		if ( empty( $settings['use_as_front_page'] ) ) {
 			return false;
 		}
 
-		return 'posts' === get_option( 'show_on_front' );
-	}
-
-	/**
-	 * Sync checkbox state when Reading settings were changed elsewhere.
-	 */
-	public static function sync_front_page_flag_with_reading() {
-		$settings = get_option( self::OPTION, array() );
-
-		if ( ! is_array( $settings ) || empty( $settings['use_as_front_page'] ) ) {
-			return;
+		if ( 'page' !== get_option( 'show_on_front' ) ) {
+			return false;
 		}
 
-		if ( 'page' === get_option( 'show_on_front' ) ) {
-			self::$syncing_reading_settings = true;
-			self::clear_use_as_front_page_flag();
-			self::$syncing_reading_settings = false;
-		}
+		$main_page_id = Art_Starter_Reading_Pages::get_main_page_id();
+
+		return $main_page_id > 0 && (int) get_option( 'page_on_front' ) === $main_page_id;
 	}
 
 	/**
@@ -684,24 +665,54 @@ class Art_Starter_Homepage {
 	 * @param mixed $value     New option value.
 	 */
 	public static function on_option_updated( $old_value, $value ) {
-		if ( self::$clearing_use_as_front_page_flag || self::$syncing_reading_settings || self::$applying_reading_settings ) {
-			return;
-		}
-
-		if ( ! is_array( $value ) || empty( $value['use_as_front_page'] ) ) {
+		if ( self::$clearing_use_as_front_page_flag || self::$syncing_reading_settings || Art_Starter_Reading_Pages::is_applying_reading_settings() ) {
 			return;
 		}
 
 		$was_enabled = is_array( $old_value ) && ! empty( $old_value['use_as_front_page'] );
-		if ( $was_enabled ) {
+		$is_enabled  = is_array( $value ) && ! empty( $value['use_as_front_page'] );
+
+		if ( $is_enabled && ! $was_enabled ) {
+			$result = Art_Starter_Reading_Pages::enable_front_page();
+			self::handle_reading_result( $result, true );
 			return;
 		}
 
-		self::activate_as_front_page();
+		if ( ! $is_enabled && $was_enabled ) {
+			Art_Starter_Reading_Pages::disable_front_page();
+			return;
+		}
+
+		if ( $is_enabled && $was_enabled ) {
+			$result = Art_Starter_Reading_Pages::ensure_reading_synced();
+			self::handle_reading_result( $result, false );
+		}
 	}
 
 	/**
-	 * Uncheck ART Starter front page before Reading switches to a static page.
+	 * @param true|WP_Error $result         Operation result.
+	 * @param bool          $clear_on_error Whether to uncheck the front page flag on failure.
+	 */
+	private static function handle_reading_result( $result, $clear_on_error ) {
+		if ( true === $result ) {
+			return;
+		}
+
+		$message = is_wp_error( $result )
+			? $result->get_error_message()
+			: __( 'Не удалось применить настройки чтения для главной страницы ART Starter.', 'art-starter' );
+
+		set_transient( 'art_starter_reading_error_' . get_current_user_id(), $message, MINUTE_IN_SECONDS );
+
+		if ( $clear_on_error ) {
+			self::$syncing_reading_settings = true;
+			self::clear_use_as_front_page_flag();
+			self::$syncing_reading_settings = false;
+		}
+	}
+
+	/**
+	 * Uncheck ART Starter front page when Reading no longer matches plugin pages.
 	 *
 	 * @param mixed $value     New option value.
 	 * @param mixed $old_value Old option value.
@@ -710,11 +721,11 @@ class Art_Starter_Homepage {
 	public static function on_reading_show_on_front_will_change( $value, $old_value ) {
 		unset( $old_value );
 
-		if ( self::$applying_reading_settings ) {
+		if ( Art_Starter_Reading_Pages::is_applying_reading_settings() ) {
 			return $value;
 		}
 
-		if ( 'page' === $value ) {
+		if ( Art_Starter_Reading_Pages::is_external_reading_change( $value, get_option( 'page_on_front' ), get_option( 'page_for_posts' ) ) ) {
 			self::$syncing_reading_settings = true;
 			self::clear_use_as_front_page_flag();
 			self::$syncing_reading_settings = false;
@@ -733,11 +744,11 @@ class Art_Starter_Homepage {
 	public static function on_reading_page_on_front_will_change( $value, $old_value ) {
 		unset( $old_value );
 
-		if ( self::$applying_reading_settings ) {
+		if ( Art_Starter_Reading_Pages::is_applying_reading_settings() ) {
 			return $value;
 		}
 
-		if ( (int) $value > 0 && 'page' === get_option( 'show_on_front' ) ) {
+		if ( Art_Starter_Reading_Pages::is_external_reading_change( get_option( 'show_on_front' ), $value, get_option( 'page_for_posts' ) ) ) {
 			self::$syncing_reading_settings = true;
 			self::clear_use_as_front_page_flag();
 			self::$syncing_reading_settings = false;
@@ -747,17 +758,40 @@ class Art_Starter_Homepage {
 	}
 
 	/**
-	 * Uncheck ART Starter front page when Reading uses a static page.
+	 * @param mixed $value     New option value.
+	 * @param mixed $old_value Old option value.
+	 * @return mixed
+	 */
+	public static function on_reading_page_for_posts_will_change( $value, $old_value ) {
+		unset( $old_value );
+
+		if ( Art_Starter_Reading_Pages::is_applying_reading_settings() ) {
+			return $value;
+		}
+
+		if ( Art_Starter_Reading_Pages::is_external_reading_change( get_option( 'show_on_front' ), get_option( 'page_on_front' ), $value ) ) {
+			self::$syncing_reading_settings = true;
+			self::clear_use_as_front_page_flag();
+			self::$syncing_reading_settings = false;
+		}
+
+		return $value;
+	}
+
+	/**
+	 * Uncheck ART Starter front page when Reading no longer matches plugin pages.
 	 *
 	 * @param mixed $old_value Old option value.
 	 * @param mixed $value     New option value.
 	 */
 	public static function on_reading_show_on_front_changed( $old_value, $value ) {
-		if ( self::$applying_reading_settings ) {
+		unset( $old_value );
+
+		if ( Art_Starter_Reading_Pages::is_applying_reading_settings() ) {
 			return;
 		}
 
-		if ( 'page' === $value ) {
+		if ( Art_Starter_Reading_Pages::is_external_reading_change( $value, get_option( 'page_on_front' ), get_option( 'page_for_posts' ) ) ) {
 			self::$syncing_reading_settings = true;
 			self::clear_use_as_front_page_flag();
 			self::$syncing_reading_settings = false;
@@ -765,17 +799,35 @@ class Art_Starter_Homepage {
 	}
 
 	/**
-	 * Uncheck ART Starter front page when a static page is selected.
-	 *
 	 * @param mixed $old_value Old option value.
 	 * @param mixed $value     New option value.
 	 */
 	public static function on_reading_page_on_front_changed( $old_value, $value ) {
-		if ( self::$applying_reading_settings ) {
+		unset( $old_value );
+
+		if ( Art_Starter_Reading_Pages::is_applying_reading_settings() ) {
 			return;
 		}
 
-		if ( (int) $value > 0 && 'page' === get_option( 'show_on_front' ) ) {
+		if ( Art_Starter_Reading_Pages::is_external_reading_change( get_option( 'show_on_front' ), $value, get_option( 'page_for_posts' ) ) ) {
+			self::$syncing_reading_settings = true;
+			self::clear_use_as_front_page_flag();
+			self::$syncing_reading_settings = false;
+		}
+	}
+
+	/**
+	 * @param mixed $old_value Old option value.
+	 * @param mixed $value     New option value.
+	 */
+	public static function on_reading_page_for_posts_changed( $old_value, $value ) {
+		unset( $old_value );
+
+		if ( Art_Starter_Reading_Pages::is_applying_reading_settings() ) {
+			return;
+		}
+
+		if ( Art_Starter_Reading_Pages::is_external_reading_change( get_option( 'show_on_front' ), get_option( 'page_on_front' ), $value ) ) {
 			self::$syncing_reading_settings = true;
 			self::clear_use_as_front_page_flag();
 			self::$syncing_reading_settings = false;
@@ -786,7 +838,7 @@ class Art_Starter_Homepage {
 	 * Render ART Starter homepage on the site front page.
 	 */
 	public static function maybe_render_front_page() {
-		if ( is_admin() || 'page' === get_option( 'show_on_front' ) ) {
+		if ( is_admin() ) {
 			return;
 		}
 
@@ -819,16 +871,6 @@ class Art_Starter_Homepage {
 
 		include $view;
 		exit;
-	}
-
-	/**
-	 * Point WordPress Reading settings to the latest posts front page.
-	 */
-	private static function activate_as_front_page() {
-		self::$applying_reading_settings = true;
-		update_option( 'show_on_front', 'posts' );
-		update_option( 'page_on_front', 0 );
-		self::$applying_reading_settings = false;
 	}
 
 	/**

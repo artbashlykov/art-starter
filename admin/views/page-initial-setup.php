@@ -20,7 +20,7 @@ $removable = $form_state['removable'];
 
 	<?php Art_Starter_Admin_Initial_Setup::render_notices(); ?>
 
-	<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" class="art-starter-initial-setup-form">
+	<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" class="art-starter-initial-setup-form" id="art-starter-initial-setup-form">
 		<?php wp_nonce_field( Art_Starter_Admin_Initial_Setup::ACTION ); ?>
 		<input type="hidden" name="action" value="<?php echo esc_attr( Art_Starter_Admin_Initial_Setup::ACTION ); ?>">
 
@@ -199,6 +199,34 @@ $removable = $form_state['removable'];
 									? __( 'Уже применено.', 'art-starter' )
 									: __( 'Снимет галочку «Любой может зарегистрироваться» в настройках WordPress.', 'art-starter' )
 							);
+							?>
+						</span>
+					</span>
+				</label>
+
+				<label class="art-starter-checkbox-item">
+					<input
+						type="checkbox"
+						name="apply_rename_uncategorized"
+						value="1"
+						<?php disabled( $technical['rename_uncategorized']['applied'] || ! $technical['rename_uncategorized']['available'] ); ?>
+					>
+					<span class="art-starter-checkbox-item__label">
+						<strong><?php esc_html_e( 'Переименовать рубрику «Без название» в «Прочее»', 'art-starter' ); ?></strong>
+						<span class="description">
+							<?php
+							if ( $technical['rename_uncategorized']['applied'] ) {
+								esc_html_e( 'Уже применено.', 'art-starter' );
+							} elseif ( ! $technical['rename_uncategorized']['available'] ) {
+								esc_html_e( 'Стандартная рубрика WordPress не найдена или уже изменена — переименование недоступно.', 'art-starter' );
+							} else {
+								printf(
+									/* translators: 1: current category name, 2: new category name */
+									esc_html__( 'Переименует рубрику по умолчанию «%1$s» в «%2$s».', 'art-starter' ),
+									$technical['rename_uncategorized']['current_name'],
+									'Прочее'
+								);
+							}
 							?>
 						</span>
 					</span>
