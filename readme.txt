@@ -4,7 +4,7 @@ Tags: starter, onboarding, landing page, link in bio, 404
 Requires at least: 6.0
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 1.0.9
+Stable tag: 1.0.10
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -40,6 +40,10 @@ ART Starter is for people who want a fast launch: technical WordPress settings, 
 The homepage and custom 404 page use self-contained layouts. When enabled, ART Starter removes active theme styles on those pages so the design stays consistent.
 
 == Changelog ==
+
+= 1.0.10 =
+* Fix false success when Hello Dolly and other default plugins were not actually deleted.
+* Verify plugin removal on disk, clear plugin cache, and retry filesystem delete.
 
 = 1.0.9 =
 * Fix demo plugin and theme cleanup (active Akismet, filesystem init, theme detection).
